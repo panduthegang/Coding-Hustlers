@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-screen pt-32 pb-16 overflow-hidden" style={{
       background: `
@@ -31,7 +33,7 @@ const HeroSection = () => {
             </p>
           </div>
 
-          <button className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white px-10 py-5 rounded-full text-xl font-['Syne'] transition-all shadow-lg hover:shadow-xl">
+          <button onClick={() => navigate('/signup')} className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white px-10 py-5 rounded-full text-xl font-['Syne'] transition-all shadow-lg hover:shadow-xl">
             Create Account
           </button>
         </div>

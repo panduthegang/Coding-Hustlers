@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -21,10 +23,10 @@ const Header = () => {
             <a href="#explore" className="text-gray-700 hover:text-purple-600 transition-colors font-['Syne'] text-lg">
               Explore
             </a>
-            <a href="#login" className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-['Syne'] text-lg">
+            <button onClick={() => navigate('/login')} className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-['Syne'] text-lg hover:opacity-80">
               Login
-            </a>
-            <button className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white px-6 py-3 rounded-full transition-all font-['Syne'] text-lg">
+            </button>
+            <button onClick={() => navigate('/signup')} className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white px-6 py-3 rounded-full transition-all font-['Syne'] text-lg">
               Sign Up
             </button>
           </nav>
@@ -74,14 +76,13 @@ const Header = () => {
             >
               Explore
             </a>
-            <a
-              href="#login"
-              className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-['Syne'] text-lg"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button
+              onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
+              className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-['Syne'] text-lg text-left"
             >
               Login
-            </a>
-            <button className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white px-6 py-3 rounded-full transition-all font-['Syne'] text-lg">
+            </button>
+            <button onClick={() => { navigate('/signup'); setIsMobileMenuOpen(false); }} className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white px-6 py-3 rounded-full transition-all font-['Syne'] text-lg">
               Sign Up
             </button>
           </nav>
