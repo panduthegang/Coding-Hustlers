@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,21 +10,41 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { signup, loginWithGoogle } = useAuth();
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Passwords do not match!');
+      setError('Passwords do not match!');
       return;
     }
-    // TODO: Implement Supabase authentication
-    console.log('Sign up with:', name, email, password);
+
+    try {
+      setError('');
+      setLoading(true);
+      await signup(email, password, name);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Failed to create account');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleSignUp = () => {
-    // TODO: Implement Google OAuth with Supabase
-    console.log('Sign up with Google');
+  const handleGoogleSignUp = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      await loginWithGoogle();
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign up with Google');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,6 +92,12 @@ const SignUp = () => {
             <p className="text-gray-500 font-['Syne'] text-sm">Create your account</p>
           </div>
 
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-['Syne']">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSignUp} className="space-y-5">
             <div>
               <input
@@ -80,6 +107,7 @@ const SignUp = () => {
                 onChange={(e) => setName(e.target.value)}
                 className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -91,6 +119,7 @@ const SignUp = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -102,11 +131,13 @@ const SignUp = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700"
                 required
+                disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                disabled={loading}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -120,11 +151,13 @@ const SignUp = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700"
                 required
+                disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                disabled={loading}
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -132,9 +165,10 @@ const SignUp = () => {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white py-4 rounded-xl font-['Syne'] text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+              className="w-full bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white py-4 rounded-xl font-['Syne'] text-lg font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+              disabled={loading}
             >
-              Sign Up
+              {loading ? 'Creating account...' : 'Sign Up'}
             </button>
           </form>
 

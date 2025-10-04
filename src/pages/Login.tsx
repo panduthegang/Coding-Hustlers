@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, loginWithGoogle } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement Supabase authentication
-    console.log('Login with:', email, password);
+
+    try {
+      setError('');
+      setLoading(true);
+      await login(email, password);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Failed to log in');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    // TODO: Implement Google OAuth with Supabase
-    console.log('Login with Google');
+  const handleGoogleLogin = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      await loginWithGoogle();
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Failed to log in with Google');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,6 +84,12 @@ const Login = () => {
             </h1>
           </div>
 
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-['Syne']">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <input
@@ -72,6 +99,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -83,11 +111,13 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700"
                 required
+                disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                disabled={loading}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -95,9 +125,10 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white py-4 rounded-xl font-['Syne'] text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+              className="w-full bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] hover:opacity-90 text-white py-4 rounded-xl font-['Syne'] text-lg font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+              disabled={loading}
             >
-              Login
+              {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
 
