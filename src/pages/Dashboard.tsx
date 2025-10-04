@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { BarChart3, CreditCard as Edit, FileText, User, Trophy, Settings, LogOut, Bell, ChevronDown, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { FileText, Bell, ChevronDown, ChevronLeft, ChevronRight, Search, CreditCard as Edit } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { getTests, type Test } from '../lib/localStorage';
+import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 
 const Dashboard = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [tests, setTests] = useState<Test[]>([]);
@@ -17,6 +18,7 @@ const Dashboard = () => {
     avgScore: 0
   });
   const [currentPage, setCurrentPage] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const testsPerPage = 2;
 
   const userName = currentUser?.displayName || 'User';
@@ -57,15 +59,6 @@ const Dashboard = () => {
     });
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (error) {
-      console.error('Failed to log out', error);
-    }
-  };
-
   const paginatedTests = tests.slice(currentPage * testsPerPage, (currentPage + 1) * testsPerPage);
   const maxPages = Math.ceil(tests.length / testsPerPage);
 
@@ -95,74 +88,21 @@ const Dashboard = () => {
       <div className="absolute inset-0 bg-[rgba(245,245,245,0.65)] backdrop-blur-[25px]"></div>
 
       <div className="relative z-10">
+        <MobileSidebarToggle onClick={() => setSidebarOpen(true)} />
         <div className="flex">
-          <aside className="w-64 min-h-screen p-8 flex flex-col justify-between border-r border-gray-300">
-            <div>
-              <div className="mb-16">
-                <h1 className="text-4xl font-bold font-['Syne']">
-                  <span className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent">
-                    Coding Hustlers
-                  </span>
-                </h1>
-              </div>
+          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-              <nav className="space-y-7">
-                <Link to="/dashboard" className="flex items-center gap-5 text-lg font-['Syne'] font-medium">
-                  <BarChart3 className="w-6 h-6" style={{ stroke: 'url(#gradient)' }} />
-                  <svg width="0" height="0">
-                    <defs>
-                      <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="13.4%" stopColor="#B33DEB" />
-                        <stop offset="86.6%" stopColor="#DE8FFF" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <span className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent">
-                    Dashboard
-                  </span>
-                </Link>
-
-                <Link to="/tests" className="flex items-center gap-5 text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors">
-                  <Edit className="w-6 h-6" />
-                  <span>Tests</span>
-                </Link>
-
-                <a href="#" className="flex items-center gap-5 text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors">
-                  <User className="w-6 h-6" />
-                  <span>Profile</span>
-                </a>
-
-                <a href="#" className="flex items-center gap-5 text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors">
-                  <Trophy className="w-6 h-6" />
-                  <span>Leaderboard</span>
-                </a>
-              </nav>
-            </div>
-
-            <div className="space-y-6">
-              <a href="#" className="flex items-center gap-5 text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors">
-                <Settings className="w-6 h-6" />
-                <span>Settings</span>
-              </a>
-
-              <button onClick={handleLogout} className="flex items-center gap-5 text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors">
-                <LogOut className="w-6 h-6" />
-                <span>Log Out</span>
-              </button>
-            </div>
-          </aside>
-
-          <main className="flex-1 p-8">
-            <header className="flex items-center justify-between mb-12">
+          <main className="flex-1 p-4 lg:p-8 pt-20 lg:pt-8">
+            <header className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-8 lg:mb-12 gap-4">
               <div>
-                <h2 className="text-5xl font-bold font-['Syne'] text-black mb-1">
+                <h2 className="text-3xl lg:text-5xl font-bold font-['Syne'] text-black mb-1">
                   Welcome {userName}!
                 </h2>
               </div>
 
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-4 px-6 py-4 bg-[rgba(250,250,250,0.75)] rounded-2xl">
-                  <Search className="w-5 h-5" style={{ stroke: 'url(#gradient2)' }} />
+              <div className="flex items-center gap-3 lg:gap-6 w-full lg:w-auto">
+                <div className="hidden sm:flex items-center gap-4 px-4 lg:px-6 py-3 lg:py-4 bg-[rgba(250,250,250,0.75)] rounded-2xl flex-1 lg:flex-none">
+                  <Search className="w-4 h-4 lg:w-5 lg:h-5" style={{ stroke: 'url(#gradient2)' }} />
                   <svg width="0" height="0">
                     <defs>
                       <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -174,17 +114,17 @@ const Dashboard = () => {
                   <input
                     type="text"
                     placeholder="Search"
-                    className="bg-transparent border-none outline-none font-['Syne'] text-black/50 w-32"
+                    className="bg-transparent border-none outline-none font-['Syne'] text-black/50 w-20 lg:w-32"
                   />
                 </div>
 
                 <div className="relative">
-                  <Bell className="w-6 h-6 text-black cursor-pointer hover:text-purple-600 transition-colors" />
+                  <Bell className="w-5 h-5 lg:w-6 lg:h-6 text-black cursor-pointer hover:text-purple-600 transition-colors" />
                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></div>
                 </div>
 
-                <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold">
+                <div className="flex items-center gap-2 lg:gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold">
                     {userName[0]?.toUpperCase()}
                   </div>
                   <ChevronDown className="w-4 h-4 text-black" />
@@ -192,11 +132,11 @@ const Dashboard = () => {
               </div>
             </header>
 
-            <div className="grid grid-cols-12 gap-6">
-              <div className="col-span-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold font-['Syne'] text-black flex items-center gap-3">
-                    <FileText className="w-6 h-6" style={{ stroke: 'url(#gradient3)' }} />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+              <div className="lg:col-span-6">
+                <div className="flex items-center justify-between mb-4 lg:mb-6">
+                  <h3 className="text-lg lg:text-xl font-bold font-['Syne'] text-black flex items-center gap-2 lg:gap-3">
+                    <FileText className="w-5 h-5 lg:w-6 lg:h-6" style={{ stroke: 'url(#gradient3)' }} />
                     <svg width="0" height="0">
                       <defs>
                         <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -213,22 +153,22 @@ const Dashboard = () => {
                       disabled={currentPage === 0}
                       className="p-2 rounded-lg border border-gray-300 hover:bg-white/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                     >
-                      <ChevronLeft className="w-5 h-5 text-black" />
+                      <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5 text-black" />
                     </button>
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage >= maxPages - 1 || tests.length === 0}
                       className="p-2 rounded-lg border border-gray-300 hover:bg-white/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                     >
-                      <ChevronRight className="w-5 h-5 text-black" />
+                      <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5 text-black" />
                     </button>
                   </div>
                 </div>
 
-                <div className="flex gap-6">
+                <div className="flex gap-4 lg:gap-6 overflow-x-auto pb-2">
                   {paginatedTests.length > 0 ? (
                     paginatedTests.map((test) => (
-                      <div key={test.id} className="relative w-52 h-72 rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform">
+                      <div key={test.id} className="relative w-44 lg:w-52 h-60 lg:h-72 rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform flex-shrink-0">
                         <img
                           src={test.type === 'mcq'
                             ? "https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=400"
@@ -239,7 +179,7 @@ const Dashboard = () => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                         <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <h4 className="text-white font-['Poppins'] font-medium mb-2 truncate">{test.title}</h4>
+                          <h4 className="text-white font-['Poppins'] font-medium mb-2 truncate text-sm lg:text-base">{test.title}</h4>
                           <div className="flex items-center gap-3">
                             {test.status === 'in_progress' && (
                               <span className="px-3 py-1 bg-black text-white text-xs font-['Poppins'] rounded">Resume</span>
@@ -272,12 +212,12 @@ const Dashboard = () => {
               </div>
 
               {showLeaderboard ? null : (
-                <div className="col-span-6">
+                <div className="lg:col-span-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-bold font-['Syne'] text-black">More Tests</h3>
+                    <h3 className="text-lg lg:text-xl font-bold font-['Syne'] text-black">More Tests</h3>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {tests.slice(2, 6).map((test) => (
                       <div key={test.id} className="bg-[rgba(250,250,250,0.75)] rounded-xl p-4 hover:bg-white/50 transition-colors cursor-pointer">
                         <h4 className="font-['Syne'] font-semibold text-black mb-2 truncate">{test.title}</h4>
@@ -293,27 +233,27 @@ const Dashboard = () => {
                 </div>
               )}
 
-              <div className="col-span-5">
-                <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-8 text-center">
-                  <h3 className="text-lg font-['Syne'] font-medium text-black/80 mb-6">
+              <div className="lg:col-span-5">
+                <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 lg:p-8 text-center">
+                  <h3 className="text-base lg:text-lg font-['Syne'] font-medium text-black/80 mb-6">
                     Upcoming Quiz Competition
                   </h3>
                   <div className="mb-6">
-                    <div className="text-6xl mb-4">📅</div>
-                    <p className="text-xl font-['Syne'] font-semibold text-black/50">12th Apr, 2024</p>
+                    <div className="text-5xl lg:text-6xl mb-4">📅</div>
+                    <p className="text-lg lg:text-xl font-['Syne'] font-semibold text-black/50">12th Apr, 2024</p>
                   </div>
-                  <button className="w-full max-w-xs px-20 py-4 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-full font-['Syne'] font-medium hover:opacity-90 transition-opacity">
+                  <button className="w-full max-w-xs px-8 lg:px-20 py-3 lg:py-4 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-full font-['Syne'] font-medium hover:opacity-90 transition-opacity">
                     Register Now
                   </button>
                 </div>
               </div>
 
-              <div className="col-span-4">
+              <div className="lg:col-span-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 hover:bg-white/50 transition-colors">
+                  <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-4 lg:p-6 hover:bg-white/50 transition-colors">
                     <div className="flex items-center gap-4 mb-2">
-                      <div className="w-16 h-16 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <Edit className="w-7 h-7" style={{ stroke: 'url(#gradient5)' }} />
+                      <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-full bg-[#F8F6FF] flex items-center justify-center">
+                        <Edit className="w-5 h-5 lg:w-7 lg:h-7" style={{ stroke: 'url(#gradient5)' }} />
                         <svg width="0" height="0">
                           <defs>
                             <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -324,61 +264,61 @@ const Dashboard = () => {
                         </svg>
                       </div>
                     </div>
-                    <p className="text-3xl font-['Poppins'] font-semibold text-black/80">{stats.totalTests}</p>
-                    <p className="text-sm font-['Syne'] text-black/50">Tests Written</p>
+                    <p className="text-2xl lg:text-3xl font-['Poppins'] font-semibold text-black/80">{stats.totalTests}</p>
+                    <p className="text-xs lg:text-sm font-['Syne'] text-black/50">Tests Written</p>
                   </div>
 
-                  <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 hover:bg-white/50 transition-colors">
+                  <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-4 lg:p-6 hover:bg-white/50 transition-colors">
                     <div className="flex items-center gap-4 mb-2">
-                      <div className="w-16 h-16 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-3xl bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-bold">%</span>
+                      <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-full bg-[#F8F6FF] flex items-center justify-center">
+                        <span className="text-2xl lg:text-3xl bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-bold">%</span>
                       </div>
                     </div>
-                    <p className="text-3xl font-['Poppins'] font-semibold text-black/80">{stats.avgScore}%</p>
-                    <p className="text-sm font-['Syne'] text-black/50">Overall Average</p>
+                    <p className="text-2xl lg:text-3xl font-['Poppins'] font-semibold text-black/80">{stats.avgScore}%</p>
+                    <p className="text-xs lg:text-sm font-['Syne'] text-black/50">Overall Average</p>
                   </div>
                 </div>
               </div>
 
-              <div className="col-span-3">
+              <div className="lg:col-span-3">
                 <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6">
-                  <div className="space-y-6">
+                  <div className="space-y-4 lg:space-y-6">
                     <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-12 h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <FileText className="w-6 h-6 text-[#66ADFF]" />
+                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
+                        <FileText className="w-5 h-5 lg:w-6 lg:h-6 text-[#66ADFF]" />
                       </div>
                       <div>
-                        <p className="text-xl font-['Poppins'] font-semibold text-black/80">{stats.totalTests}</p>
+                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.totalTests}</p>
                         <p className="text-xs font-['Syne'] text-black/50">No of Tests</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-12 h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-xl">👍</span>
+                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
+                        <span className="text-lg lg:text-xl">👍</span>
                       </div>
                       <div>
-                        <p className="text-xl font-['Poppins'] font-semibold text-black/80">{stats.passed}</p>
+                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.passed}</p>
                         <p className="text-xs font-['Syne'] text-black/50">Passed</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-12 h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-xl">👎</span>
+                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
+                        <span className="text-lg lg:text-xl">👎</span>
                       </div>
                       <div>
-                        <p className="text-xl font-['Poppins'] font-semibold text-black/80">{stats.failed}</p>
+                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.failed}</p>
                         <p className="text-xs font-['Syne'] text-black/50">Failed</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-12 h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-xl">⭐</span>
+                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
+                        <span className="text-lg lg:text-xl">⭐</span>
                       </div>
                       <div>
-                        <p className="text-xl font-['Poppins'] font-semibold text-black/80">{stats.pending}</p>
+                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.pending}</p>
                         <p className="text-xs font-['Syne'] text-black/50">Waiting for result</p>
                       </div>
                     </div>

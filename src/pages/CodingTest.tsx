@@ -215,27 +215,27 @@ const CodingTest = () => {
       `
     }}>
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold font-['Syne'] text-black">{problem?.title || 'Coding Challenge'}</h1>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 lg:mb-6 gap-4">
+          <h1 className="text-xl lg:text-3xl font-bold font-['Syne'] text-black">{problem?.title || 'Coding Challenge'}</h1>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-white px-6 py-3 rounded-xl shadow-lg">
-              <Clock className="w-5 h-5 text-purple-600" />
-              <span className={`font-['Syne'] font-bold ${timeLeft < 300 ? 'text-red-600' : 'text-gray-800'}`}>
+            <div className="flex items-center gap-2 bg-white px-4 lg:px-6 py-2 lg:py-3 rounded-xl shadow-lg">
+              <Clock className="w-4 h-4 lg:w-5 lg:h-5 text-purple-600" />
+              <span className={`font-['Syne'] font-bold text-sm lg:text-base ${timeLeft < 300 ? 'text-red-600' : 'text-gray-800'}`}>
                 {formatTime(timeLeft)}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl p-6 shadow-xl overflow-y-auto max-h-[calc(100vh-200px)]">
-            <h2 className="text-2xl font-bold font-['Syne'] mb-4">Problem Description</h2>
-            <p className="text-gray-700 font-['Syne'] mb-6 whitespace-pre-wrap">{problem?.description}</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+          <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-xl overflow-y-auto max-h-[400px] lg:max-h-[calc(100vh-200px)]">
+            <h2 className="text-lg lg:text-2xl font-bold font-['Syne'] mb-4">Problem Description</h2>
+            <p className="text-sm lg:text-base text-gray-700 font-['Syne'] mb-6 whitespace-pre-wrap">{problem?.description}</p>
 
             {problem?.examples && problem.examples.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-bold font-['Syne'] text-lg mb-3">Examples:</h3>
+                <h3 className="font-bold font-['Syne'] text-base lg:text-lg mb-3">Examples:</h3>
                 {problem.examples.map((example, index) => (
                   <div key={index} className="bg-gray-50 rounded-lg p-4 mb-3">
                     <p className="font-semibold">Example {index + 1}:</p>
@@ -249,7 +249,7 @@ const CodingTest = () => {
 
             {problem?.constraints && problem.constraints.length > 0 && (
               <div>
-                <h3 className="font-bold font-['Syne'] text-lg mb-3">Constraints:</h3>
+                <h3 className="font-bold font-['Syne'] text-base lg:text-lg mb-3">Constraints:</h3>
                 <ul className="list-disc list-inside space-y-1">
                   {problem.constraints.map((constraint, index) => (
                     <li key={index} className="text-gray-700 text-sm">{constraint}</li>
@@ -259,14 +259,14 @@ const CodingTest = () => {
             )}
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-xl flex flex-col">
+          <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-xl flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {(['javascript', 'python', 'java'] as const).map((lang) => (
                   <button
                     key={lang}
                     onClick={() => handleLanguageChange(lang)}
-                    className={`px-4 py-2 rounded-lg font-['Syne'] font-medium capitalize transition-colors ${
+                    className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg font-['Syne'] font-medium capitalize transition-colors text-sm lg:text-base ${
                       language === lang
                         ? 'bg-purple-600 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -280,7 +280,7 @@ const CodingTest = () => {
               <button
                 onClick={handleSubmit}
                 disabled={evaluating}
-                className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-lg font-['Syne'] font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="flex items-center gap-2 px-4 lg:px-6 py-2 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-lg font-['Syne'] font-medium hover:opacity-90 transition-opacity disabled:opacity-50 text-sm lg:text-base"
               >
                 <Play className="w-4 h-4" />
                 {evaluating ? 'Evaluating...' : 'Submit Code'}
@@ -290,7 +290,7 @@ const CodingTest = () => {
             <textarea
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="flex-1 font-mono text-sm p-4 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none resize-none"
+              className="flex-1 font-mono text-xs lg:text-sm p-3 lg:p-4 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none resize-none"
               placeholder="Write your code here..."
               spellCheck={false}
             />

@@ -234,23 +234,23 @@ const MCQTest = () => {
       `
     }}>
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold font-['Syne'] text-black">{topic} - MCQ Test</h1>
-            <p className="text-gray-600 font-['Syne']">Question {currentQuestion + 1} of {questions.length}</p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 lg:mb-8 gap-4">
+          <div className="flex-1">
+            <h1 className="text-xl lg:text-3xl font-bold font-['Syne'] text-black">{topic} - MCQ Test</h1>
+            <p className="text-sm lg:text-base text-gray-600 font-['Syne']">Question {currentQuestion + 1} of {questions.length}</p>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-white px-6 py-3 rounded-xl shadow-lg">
-              <Clock className="w-5 h-5 text-purple-600" />
-              <span className={`font-['Syne'] font-bold ${timeLeft < 60 ? 'text-red-600' : 'text-gray-800'}`}>
+            <div className="flex items-center gap-2 bg-white px-4 lg:px-6 py-2 lg:py-3 rounded-xl shadow-lg">
+              <Clock className="w-4 h-4 lg:w-5 lg:h-5 text-purple-600" />
+              <span className={`font-['Syne'] font-bold text-sm lg:text-base ${timeLeft < 60 ? 'text-red-600' : 'text-gray-800'}`}>
                 {formatTime(timeLeft)}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-8 shadow-xl mb-6">
+        <div className="bg-white rounded-2xl p-4 lg:p-8 shadow-xl mb-6">
           <div className="mb-2">
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
@@ -260,7 +260,7 @@ const MCQTest = () => {
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold font-['Syne'] text-black mb-8">
+          <h2 className="text-lg lg:text-2xl font-bold font-['Syne'] text-black mb-6 lg:mb-8">
             {questions[currentQuestion].question}
           </h2>
 
@@ -269,19 +269,19 @@ const MCQTest = () => {
               <button
                 key={key}
                 onClick={() => handleAnswerSelect(key)}
-                className={`w-full text-left p-6 rounded-xl border-2 transition-all font-['Syne'] ${
+                className={`w-full text-left p-4 lg:p-6 rounded-xl border-2 transition-all font-['Syne'] text-sm lg:text-base ${
                   selectedAnswer === key
                     ? 'border-purple-500 bg-purple-50'
                     : 'border-gray-200 bg-white hover:border-purple-300'
                 }`}
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
+                  <div className={`w-6 h-6 lg:w-8 lg:h-8 rounded-full border-2 flex items-center justify-center ${
                     selectedAnswer === key
                       ? 'border-purple-500 bg-purple-500'
                       : 'border-gray-300'
                   }`}>
-                    {selectedAnswer === key && <CheckCircle className="w-5 h-5 text-white" />}
+                    {selectedAnswer === key && <CheckCircle className="w-4 h-4 lg:w-5 lg:h-5 text-white" />}
                   </div>
                   <div>
                     <span className="font-bold text-gray-700 mr-2">{key}.</span>
@@ -297,7 +297,7 @@ const MCQTest = () => {
           <button
             onClick={handleNext}
             disabled={!selectedAnswer}
-            className="px-8 py-4 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-xl font-['Syne'] text-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-xl font-['Syne'] text-base lg:text-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {currentQuestion === questions.length - 1 ? 'Submit Test' : 'Next Question'}
           </button>
