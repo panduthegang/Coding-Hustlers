@@ -89,10 +89,9 @@ const Dashboard = () => {
 
       <div className="relative z-10">
         <MobileSidebarToggle onClick={() => setSidebarOpen(true)} />
-        <div className="flex">
-          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-          <main className="flex-1 p-4 lg:p-8 pt-20 lg:pt-8">
+        <main className="lg:ml-64 p-4 lg:p-8 pt-20 lg:pt-8">
             <header className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-8 lg:mb-12 gap-4">
               <div>
                 <h2 className="text-3xl lg:text-5xl font-bold font-['Syne'] text-black mb-1">
@@ -327,7 +326,6 @@ const Dashboard = () => {
               </div>
             </div>
           </main>
-        </div>
       </div>
     </div>
   );

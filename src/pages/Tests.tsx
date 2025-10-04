@@ -37,10 +37,9 @@ const Tests = () => {
 
       <div className="relative z-10">
         <MobileSidebarToggle onClick={() => setSidebarOpen(true)} />
-        <div className="flex">
-          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-          <main className="flex-1 p-4 lg:p-8 pt-20 lg:pt-8">
+        <main className="lg:ml-64 p-4 lg:p-8 pt-20 lg:pt-8">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl lg:text-5xl font-bold font-['Syne'] text-black mb-6 lg:mb-8">
                 Start a New Test
@@ -128,7 +127,6 @@ const Tests = () => {
               </div>
             </div>
           </main>
-        </div>
       </div>
     </div>
   );

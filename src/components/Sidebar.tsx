@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       />
 
       <aside
-        className={`fixed lg:static top-0 left-0 h-screen w-64 bg-white/80 backdrop-blur-md p-6 lg:p-8 flex flex-col justify-between border-r border-gray-300 z-50 transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-screen w-64 bg-white/80 backdrop-blur-md p-6 lg:p-8 flex flex-col justify-between border-r border-gray-300 z-50 transition-transform duration-300 overflow-y-auto ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
