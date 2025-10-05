@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Bell, ChevronDown, ChevronLeft, ChevronRight, Search, CreditCard as Edit } from 'lucide-react';
+import { FileText, Bell, ChevronDown, ChevronLeft, ChevronRight, Search, CreditCard as Edit, Calendar, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { getTests, type Test } from '../lib/localStorage';
@@ -32,7 +32,23 @@ const Dashboard = () => {
 
   const fetchUserTests = () => {
     const userTests = getTests(currentUser?.uid);
-    const sortedTests = userTests.sort((a, b) =>
+
+    // Remove duplicates - keep the most recent version of each test based on title
+    const uniqueTests = userTests.reduce((acc: Test[], current) => {
+      const existing = acc.find(t => t.title === current.title);
+      if (!existing) {
+        acc.push(current);
+      } else {
+        // Keep the one with the latest created_at
+        const existingIndex = acc.indexOf(existing);
+        if (new Date(current.created_at).getTime() > new Date(existing.created_at).getTime()) {
+          acc[existingIndex] = current;
+        }
+      }
+      return acc;
+    }, []);
+
+    const sortedTests = uniqueTests.sort((a, b) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
     setTests(sortedTests);
@@ -41,17 +57,32 @@ const Dashboard = () => {
   const fetchStats = () => {
     const userTests = getTests(currentUser?.uid);
 
-    const completed = userTests.filter((t: Test) => t.status === 'completed');
+    // Remove duplicates - keep the most recent version of each test based on title
+    const uniqueTests = userTests.reduce((acc: Test[], current) => {
+      const existing = acc.find(t => t.title === current.title);
+      if (!existing) {
+        acc.push(current);
+      } else {
+        // Keep the one with the latest created_at
+        const existingIndex = acc.indexOf(existing);
+        if (new Date(current.created_at).getTime() > new Date(existing.created_at).getTime()) {
+          acc[existingIndex] = current;
+        }
+      }
+      return acc;
+    }, []);
+
+    const completed = uniqueTests.filter((t: Test) => t.status === 'completed');
     const passed = completed.filter((t: Test) => t.score >= t.max_score * 0.6);
     const failed = completed.filter((t: Test) => t.score < t.max_score * 0.6);
-    const pending = userTests.filter((t: Test) => t.status === 'pending_result');
+    const pending = uniqueTests.filter((t: Test) => t.status === 'pending_result');
 
     const avgScore = completed.length > 0
       ? Math.round(completed.reduce((sum: number, t: Test) => sum + (t.score / t.max_score) * 100, 0) / completed.length)
       : 0;
 
     setStats({
-      totalTests: userTests.length,
+      totalTests: uniqueTests.length,
       passed: passed.length,
       failed: failed.length,
       pending: pending.length,
@@ -131,11 +162,43 @@ const Dashboard = () => {
               </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
-              <div className="lg:col-span-6">
-                <div className="flex items-center justify-between mb-4 lg:mb-6">
-                  <h3 className="text-lg lg:text-xl font-bold font-['Syne'] text-black flex items-center gap-2 lg:gap-3">
-                    <FileText className="w-5 h-5 lg:w-6 lg:h-6" style={{ stroke: 'url(#gradient3)' }} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 hover:bg-white/50 transition-colors">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                    <FileText className="w-7 h-7 text-white" />
+                  </div>
+                </div>
+                <p className="text-3xl font-['Poppins'] font-bold text-black/80 mb-1">{stats.totalTests}</p>
+                <p className="text-sm font-['Syne'] text-black/50">Total Tests Given</p>
+              </div>
+
+              <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 hover:bg-white/50 transition-colors">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                    <span className="text-2xl">✓</span>
+                  </div>
+                </div>
+                <p className="text-3xl font-['Poppins'] font-bold text-black/80 mb-1">{stats.passed}</p>
+                <p className="text-sm font-['Syne'] text-black/50">Passed Tests</p>
+              </div>
+
+              <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 hover:bg-white/50 transition-colors">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
+                    <span className="text-2xl">✗</span>
+                  </div>
+                </div>
+                <p className="text-3xl font-['Poppins'] font-bold text-black/80 mb-1">{stats.failed}</p>
+                <p className="text-sm font-['Syne'] text-black/50">Failed Tests</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="lg:col-span-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold font-['Syne'] text-black flex items-center gap-3">
+                    <FileText className="w-6 h-6" style={{ stroke: 'url(#gradient3)' }} />
                     <svg width="0" height="0">
                       <defs>
                         <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -152,173 +215,155 @@ const Dashboard = () => {
                       disabled={currentPage === 0}
                       className="p-2 rounded-lg border border-gray-300 hover:bg-white/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                     >
-                      <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5 text-black" />
+                      <ChevronLeft className="w-5 h-5 text-black" />
                     </button>
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage >= maxPages - 1 || tests.length === 0}
                       className="p-2 rounded-lg border border-gray-300 hover:bg-white/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                     >
-                      <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5 text-black" />
+                      <ChevronRight className="w-5 h-5 text-black" />
                     </button>
                   </div>
                 </div>
 
-                <div className="flex gap-4 lg:gap-6 overflow-x-auto pb-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {paginatedTests.length > 0 ? (
-                    paginatedTests.map((test) => (
-                      <div key={test.id} className="relative w-44 lg:w-52 h-60 lg:h-72 rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform flex-shrink-0">
-                        <img
-                          src={test.type === 'mcq'
-                            ? "https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=400"
-                            : "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=400"
-                          }
-                          alt={test.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <h4 className="text-white font-['Poppins'] font-medium mb-2 truncate text-sm lg:text-base">{test.title}</h4>
-                          <div className="flex items-center gap-3">
+                    paginatedTests.map((test) => {
+                      const isPassed = test.status === 'completed' && test.score >= test.max_score * 0.6;
+                      const isFailed = test.status === 'completed' && test.score < test.max_score * 0.6;
+                      const scorePercentage = test.status === 'completed' ? Math.round((test.score / test.max_score) * 100) : 0;
+
+                      return (
+                        <div
+                          key={test.id}
+                          className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 hover:shadow-xl transition-all duration-200 cursor-pointer border border-gray-100"
+                        >
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="px-4 py-1.5 rounded-lg bg-[#B33DEB]">
+                              <span className="text-white text-sm font-semibold font-['Poppins']">
+                                {test.type === 'mcq' ? 'MCQ TEST' : 'CODING'}
+                              </span>
+                            </div>
+
+                            {test.status === 'completed' && (
+                              <div className={`w-14 h-14 rounded-full flex items-center justify-center ${
+                                isPassed ? 'bg-[#22C55E]' : 'bg-[#EF4444]'
+                              }`}>
+                                <span className="text-white text-sm font-bold font-['Poppins']">
+                                  {scorePercentage}%
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          <h4 className="font-['Syne'] font-semibold text-black text-base mb-4 leading-snug min-h-[2.5rem] line-clamp-2">
+                            {test.title}
+                          </h4>
+
+                          <div className="mb-4">
                             {test.status === 'in_progress' && (
-                              <span className="px-3 py-1 bg-black text-white text-xs font-['Poppins'] rounded">Resume</span>
+                              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F59E0B] text-white text-sm font-['Poppins'] rounded-full">
+                                <Clock className="w-3.5 h-3.5" />
+                                In Progress
+                              </span>
                             )}
                             {test.status === 'completed' && (
-                              <div className="relative w-10 h-10">
-                                <div className={`absolute inset-0 ${test.score >= test.max_score * 0.6 ? 'bg-green-500' : 'bg-red-500'} rounded-full flex items-center justify-center`}>
-                                  <span className="text-white text-xs font-['Poppins']">
-                                    {Math.round((test.score / test.max_score) * 100)}%
-                                  </span>
-                                </div>
+                              <span className={`inline-flex items-center gap-2 px-3 py-1.5 ${
+                                isPassed ? 'bg-[#22C55E]' : 'bg-[#EF4444]'
+                              } text-white text-sm font-['Poppins'] rounded-full`}>
+                                {isPassed ? (
+                                  <>
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    Passed
+                                  </>
+                                ) : (
+                                  <>
+                                    <XCircle className="w-3.5 h-3.5" />
+                                    Failed
+                                  </>
+                                )}
+                              </span>
+                            )}
+                            {test.status === 'pending_result' && (
+                              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#3B82F6] text-white text-sm font-['Poppins'] rounded-full">
+                                <Clock className="w-3.5 h-3.5" />
+                                Pending Result
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div className="flex items-center gap-2 text-sm text-gray-500 font-['Syne']">
+                              <Calendar className="w-4 h-4" />
+                              <span>{new Date(test.created_at).toLocaleDateString()}</span>
+                            </div>
+                            {test.status === 'completed' && (
+                              <div className="flex items-center gap-2 text-sm font-medium text-gray-700 font-['Poppins']">
+                                <CheckCircle2 className="w-4 h-4" />
+                                <span>{test.score}/{test.max_score}</span>
                               </div>
                             )}
                           </div>
                         </div>
-                      </div>
-                    ))
+                      );
+                    })
                   ) : (
-                    <div className="w-full text-center py-16">
-                      <p className="text-gray-500 font-['Syne']">No tests yet. Start your first test!</p>
+                    <div className="col-span-2 text-center py-16">
+                      <div className="mb-4">
+                        <div className="w-20 h-20 mx-auto bg-[#F3E8FF] rounded-full flex items-center justify-center mb-4">
+                          <FileText className="w-10 h-10 text-[#B33DEB]" />
+                        </div>
+                        <p className="text-gray-600 font-['Syne'] text-lg mb-2">No tests yet</p>
+                        <p className="text-gray-400 font-['Syne'] text-sm mb-6">Start your learning journey today!</p>
+                      </div>
                       <Link
                         to="/tests"
-                        className="mt-4 inline-block px-6 py-3 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-lg font-['Syne'] hover:opacity-90 transition-opacity"
+                        className="inline-block px-8 py-3 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-xl font-['Syne'] font-semibold hover:opacity-90 transition-opacity"
                       >
-                        Take a Test
+                        Take Your First Test
                       </Link>
                     </div>
                   )}
                 </div>
               </div>
 
-              {showLeaderboard ? null : (
-                <div className="lg:col-span-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg lg:text-xl font-bold font-['Syne'] text-black">More Tests</h3>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {tests.slice(2, 6).map((test) => (
-                      <div key={test.id} className="bg-[rgba(250,250,250,0.75)] rounded-xl p-4 hover:bg-white/50 transition-colors cursor-pointer">
-                        <h4 className="font-['Syne'] font-semibold text-black mb-2 truncate">{test.title}</h4>
-                        <p className="text-xs text-black/50 font-['Syne']">
-                          {test.type === 'mcq' ? 'Multiple Choice' : 'Coding Challenge'}
-                        </p>
-                        <p className="text-xs text-black/50 font-['Syne'] mt-1">
-                          Status: {test.status}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="lg:col-span-5">
-                <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 lg:p-8 text-center">
-                  <h3 className="text-base lg:text-lg font-['Syne'] font-medium text-black/80 mb-6">
-                    Upcoming Quiz Competition
-                  </h3>
-                  <div className="mb-6">
-                    <div className="text-5xl lg:text-6xl mb-4">📅</div>
-                    <p className="text-lg lg:text-xl font-['Syne'] font-semibold text-black/50">12th Apr, 2024</p>
-                  </div>
-                  <button className="w-full max-w-xs px-8 lg:px-20 py-3 lg:py-4 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-full font-['Syne'] font-medium hover:opacity-90 transition-opacity">
-                    Register Now
-                  </button>
-                </div>
-              </div>
-
               <div className="lg:col-span-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-4 lg:p-6 hover:bg-white/50 transition-colors">
-                    <div className="flex items-center gap-4 mb-2">
-                      <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <Edit className="w-5 h-5 lg:w-7 lg:h-7" style={{ stroke: 'url(#gradient5)' }} />
-                        <svg width="0" height="0">
-                          <defs>
-                            <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="13.4%" stopColor="#B33DEB" />
-                              <stop offset="86.6%" stopColor="#DE8FFF" />
-                            </linearGradient>
-                          </defs>
-                        </svg>
-                      </div>
-                    </div>
-                    <p className="text-2xl lg:text-3xl font-['Poppins'] font-semibold text-black/80">{stats.totalTests}</p>
-                    <p className="text-xs lg:text-sm font-['Syne'] text-black/50">Tests Written</p>
-                  </div>
-
-                  <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-4 lg:p-6 hover:bg-white/50 transition-colors">
-                    <div className="flex items-center gap-4 mb-2">
-                      <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-2xl lg:text-3xl bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-bold">%</span>
-                      </div>
-                    </div>
-                    <p className="text-2xl lg:text-3xl font-['Poppins'] font-semibold text-black/80">{stats.avgScore}%</p>
-                    <p className="text-xs lg:text-sm font-['Syne'] text-black/50">Overall Average</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="lg:col-span-3">
                 <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6">
-                  <div className="space-y-4 lg:space-y-6">
-                    <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <FileText className="w-5 h-5 lg:w-6 lg:h-6 text-[#66ADFF]" />
+                  <h3 className="text-lg font-bold font-['Syne'] text-black mb-6">Statistics Overview</h3>
+                  <div className="space-y-5">
+                    <div className="flex items-center gap-4 hover:bg-white/30 p-3 rounded-lg transition-colors">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center flex-shrink-0">
+                        <span className="text-xl bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent font-bold">%</span>
                       </div>
                       <div>
-                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.totalTests}</p>
-                        <p className="text-xs font-['Syne'] text-black/50">No of Tests</p>
+                        <p className="text-2xl font-['Poppins'] font-bold text-black/80">{stats.avgScore}%</p>
+                        <p className="text-xs font-['Syne'] text-black/50">Average Score</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-lg lg:text-xl">👍</span>
+                    <div className="flex items-center gap-4 hover:bg-white/30 p-3 rounded-lg transition-colors">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                        <span className="text-xl">⏳</span>
                       </div>
                       <div>
-                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.passed}</p>
-                        <p className="text-xs font-['Syne'] text-black/50">Passed</p>
+                        <p className="text-2xl font-['Poppins'] font-bold text-black/80">{stats.pending}</p>
+                        <p className="text-xs font-['Syne'] text-black/50">Pending Results</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-lg lg:text-xl">👎</span>
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-['Syne'] text-black/60">Pass Rate</span>
+                        <span className="text-sm font-['Syne'] font-bold text-black/80">
+                          {stats.totalTests > 0 ? Math.round((stats.passed / stats.totalTests) * 100) : 0}%
+                        </span>
                       </div>
-                      <div>
-                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.failed}</p>
-                        <p className="text-xs font-['Syne'] text-black/50">Failed</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F8F6FF] flex items-center justify-center">
-                        <span className="text-lg lg:text-xl">⭐</span>
-                      </div>
-                      <div>
-                        <p className="text-lg lg:text-xl font-['Poppins'] font-semibold text-black/80">{stats.pending}</p>
-                        <p className="text-xs font-['Syne'] text-black/50">Waiting for result</p>
+                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-all"
+                          style={{ width: `${stats.totalTests > 0 ? (stats.passed / stats.totalTests) * 100 : 0}%` }}
+                        ></div>
                       </div>
                     </div>
                   </div>
