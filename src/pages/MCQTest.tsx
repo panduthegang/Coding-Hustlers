@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { generateMCQQuestions } from '../lib/gemini';
-import { saveTest, updateTest, saveQuestions, updateQuestion } from '../lib/localStorage';
+import { saveTestToFirestore, updateTestInFirestore, saveQuestionsToFirestore, updateQuestionInFirestore } from '../services/firestore';
 
 interface Question {
   question: string;
@@ -59,7 +59,7 @@ const MCQTest = () => {
       const generatedQuestions = await generateMCQQuestions(topic, difficulty, 10);
       setQuestions(generatedQuestions);
 
-      const testData = saveTest({
+      const testId = await saveTestToFirestore({
         user_id: currentUser?.uid || 'anonymous',
         title: `${topic} - MCQ Test`,
         type: 'mcq',
@@ -71,17 +71,17 @@ const MCQTest = () => {
         completed_at: null
       });
 
-      setTestId(testData.id);
+      setTestId(testId);
 
       const questionsData = generatedQuestions.map((q: Question) => ({
-        test_id: testData.id,
+        test_id: testId,
         question: q.question,
         options: q.options,
         correct_answer: q.correct_answer,
         points: 1
       }));
 
-      saveQuestions(questionsData);
+      await saveQuestionsToFirestore(questionsData);
     } catch (error) {
       console.error('Error loading questions:', error);
       alert('Failed to generate questions. Please try again.');
@@ -125,21 +125,21 @@ const MCQTest = () => {
     setShowResults(true);
 
     if (testId) {
-      updateTest(testId, {
+      await updateTestInFirestore(testId, {
         score: calculatedScore,
         status: 'completed',
         completed_at: new Date().toISOString()
       });
 
-      questions.forEach((q, index) => {
+      for (const [index, q] of questions.entries()) {
         const userAnswer = finalAnswers[index];
         const isCorrect = userAnswer === q.correct_answer;
 
-        updateQuestion(testId, q.question, {
+        await updateQuestionInFirestore(testId, q.question, {
           user_answer: userAnswer,
           is_correct: isCorrect
         });
-      });
+      }
     }
   };
 

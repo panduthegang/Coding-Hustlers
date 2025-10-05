@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Clock, Play } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { generateCodingProblem, evaluateCode } from '../lib/gemini';
-import { saveTest, updateTest, saveQuestions, updateQuestion } from '../lib/localStorage';
+import { saveTestToFirestore, updateTestInFirestore, saveQuestionsToFirestore, updateQuestionInFirestore } from '../services/firestore';
 
 interface CodingProblem {
   title: string;
@@ -61,7 +61,7 @@ const CodingTest = () => {
       setProblem(generatedProblem);
       setCode(generatedProblem.starterCode.javascript);
 
-      const testData = saveTest({
+      const testId = await saveTestToFirestore({
         user_id: currentUser?.uid || 'anonymous',
         title: `${topic} - Coding Challenge`,
         type: 'coding',
@@ -73,10 +73,10 @@ const CodingTest = () => {
         completed_at: null
       });
 
-      setTestId(testData.id);
+      setTestId(testId);
 
-      saveQuestions([{
-        test_id: testData.id,
+      await saveQuestionsToFirestore([{
+        test_id: testId,
         question: generatedProblem.description,
         options: generatedProblem,
         correct_answer: 'See test cases',
@@ -107,13 +107,13 @@ const CodingTest = () => {
       setResult(evaluation);
       setShowResults(true);
 
-      updateTest(testId, {
+      await updateTestInFirestore(testId, {
         score: evaluation.score,
         status: 'completed',
         completed_at: new Date().toISOString()
       });
 
-      updateQuestion(testId, problem.description, {
+      await updateQuestionInFirestore(testId, problem.description, {
         user_answer: code,
         is_correct: evaluation.passed
       });

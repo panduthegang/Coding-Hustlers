@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { FileText, Bell, ChevronDown, ChevronLeft, ChevronRight, Search, CreditCard as Edit, Calendar, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { FileText, Bell, ChevronDown, ChevronLeft, ChevronRight, Search, CreditCard as Edit, Calendar, CheckCircle2, XCircle, Clock, Code, Check, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { getTests, type Test } from '../lib/localStorage';
+import { type Test } from '../lib/localStorage';
+import { getUserTests, getTestStats } from '../services/firestore';
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 
 const Dashboard = () => {
@@ -30,64 +31,28 @@ const Dashboard = () => {
     }
   }, [currentUser]);
 
-  const fetchUserTests = () => {
-    const userTests = getTests(currentUser?.uid);
-
-    // Remove duplicates - keep the most recent version of each test based on title
-    const uniqueTests = userTests.reduce((acc: Test[], current) => {
-      const existing = acc.find(t => t.title === current.title);
-      if (!existing) {
-        acc.push(current);
-      } else {
-        // Keep the one with the latest created_at
-        const existingIndex = acc.indexOf(existing);
-        if (new Date(current.created_at).getTime() > new Date(existing.created_at).getTime()) {
-          acc[existingIndex] = current;
-        }
-      }
-      return acc;
-    }, []);
-
-    const sortedTests = uniqueTests.sort((a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    );
-    setTests(sortedTests);
+  const fetchUserTests = async () => {
+    try {
+      const statsData = await getTestStats(currentUser?.uid!);
+      setTests(statsData.tests);
+    } catch (error) {
+      console.error('Error fetching tests:', error);
+    }
   };
 
-  const fetchStats = () => {
-    const userTests = getTests(currentUser?.uid);
-
-    // Remove duplicates - keep the most recent version of each test based on title
-    const uniqueTests = userTests.reduce((acc: Test[], current) => {
-      const existing = acc.find(t => t.title === current.title);
-      if (!existing) {
-        acc.push(current);
-      } else {
-        // Keep the one with the latest created_at
-        const existingIndex = acc.indexOf(existing);
-        if (new Date(current.created_at).getTime() > new Date(existing.created_at).getTime()) {
-          acc[existingIndex] = current;
-        }
-      }
-      return acc;
-    }, []);
-
-    const completed = uniqueTests.filter((t: Test) => t.status === 'completed');
-    const passed = completed.filter((t: Test) => t.score >= t.max_score * 0.6);
-    const failed = completed.filter((t: Test) => t.score < t.max_score * 0.6);
-    const pending = uniqueTests.filter((t: Test) => t.status === 'pending_result');
-
-    const avgScore = completed.length > 0
-      ? Math.round(completed.reduce((sum: number, t: Test) => sum + (t.score / t.max_score) * 100, 0) / completed.length)
-      : 0;
-
-    setStats({
-      totalTests: uniqueTests.length,
-      passed: passed.length,
-      failed: failed.length,
-      pending: pending.length,
-      avgScore
-    });
+  const fetchStats = async () => {
+    try {
+      const statsData = await getTestStats(currentUser?.uid!);
+      setStats({
+        totalTests: statsData.totalTests,
+        passed: statsData.passed,
+        failed: statsData.failed,
+        pending: statsData.pending,
+        avgScore: statsData.avgScore
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
   };
 
   const paginatedTests = tests.slice(currentPage * testsPerPage, (currentPage + 1) * testsPerPage);
@@ -176,7 +141,7 @@ const Dashboard = () => {
               <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 hover:bg-white/50 transition-colors">
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                    <span className="text-2xl">✓</span>
+                    <Check className="w-8 h-8 text-white" strokeWidth={3} />
                   </div>
                 </div>
                 <p className="text-3xl font-['Poppins'] font-bold text-black/80 mb-1">{stats.passed}</p>
@@ -186,7 +151,7 @@ const Dashboard = () => {
               <div className="bg-[rgba(250,250,250,0.75)] rounded-xl p-6 hover:bg-white/50 transition-colors">
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
-                    <span className="text-2xl">✗</span>
+                    <X className="w-8 h-8 text-white" strokeWidth={3} />
                   </div>
                 </div>
                 <p className="text-3xl font-['Poppins'] font-bold text-black/80 mb-1">{stats.failed}</p>
@@ -237,73 +202,136 @@ const Dashboard = () => {
                       return (
                         <div
                           key={test.id}
-                          className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 hover:shadow-xl transition-all duration-200 cursor-pointer border border-gray-100"
+                          className="group relative bg-white/60 backdrop-blur-xl rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 cursor-pointer border border-white/40 overflow-hidden"
+                          style={{
+                            background: test.status === 'completed'
+                              ? isPassed
+                                ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.6) 100%)'
+                                : 'linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.6) 100%)'
+                              : 'linear-gradient(135deg, rgba(147, 51, 234, 0.05) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.6) 100%)'
+                          }}
                         >
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="px-4 py-1.5 rounded-lg bg-[#B33DEB]">
-                              <span className="text-white text-sm font-semibold font-['Poppins']">
-                                {test.type === 'mcq' ? 'MCQ TEST' : 'CODING'}
-                              </span>
+                          <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 ${
+                            test.status === 'completed'
+                              ? isPassed ? 'bg-green-400' : 'bg-red-400'
+                              : 'bg-purple-400'
+                          }`}></div>
+
+                          <div className="relative z-10">
+                            <div className="flex items-start justify-between mb-5">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-md ${
+                                  test.type === 'mcq'
+                                    ? 'bg-gradient-to-br from-blue-500 to-cyan-500'
+                                    : 'bg-gradient-to-br from-purple-500 to-pink-500'
+                                }`}>
+                                  {test.type === 'mcq' ? (
+                                    <Edit className="w-6 h-6 text-white" />
+                                  ) : (
+                                    <Code className="w-6 h-6 text-white" />
+                                  )}
+                                </div>
+                                <div>
+                                  <div className={`px-3 py-1 rounded-lg text-xs font-bold font-['Poppins'] tracking-wider ${
+                                    test.type === 'mcq'
+                                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
+                                      : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                                  }`}>
+                                    {test.type === 'mcq' ? 'MCQ TEST' : 'CODING'}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {test.status === 'completed' && (
+                                <div className="relative">
+                                  <svg className="w-16 h-16 transform -rotate-90">
+                                    <circle
+                                      cx="32"
+                                      cy="32"
+                                      r="28"
+                                      stroke={isPassed ? '#10B981' : '#EF4444'}
+                                      strokeWidth="4"
+                                      fill="none"
+                                      opacity="0.2"
+                                    />
+                                    <circle
+                                      cx="32"
+                                      cy="32"
+                                      r="28"
+                                      stroke={isPassed ? '#10B981' : '#EF4444'}
+                                      strokeWidth="4"
+                                      fill="none"
+                                      strokeDasharray={`${2 * Math.PI * 28}`}
+                                      strokeDashoffset={`${2 * Math.PI * 28 * (1 - scorePercentage / 100)}`}
+                                      strokeLinecap="round"
+                                      className="transition-all duration-1000 ease-out"
+                                    />
+                                  </svg>
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <span className={`text-base font-bold font-['Poppins'] ${
+                                      isPassed ? 'text-green-600' : 'text-red-600'
+                                    }`}>
+                                      {scorePercentage}%
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
                             </div>
 
-                            {test.status === 'completed' && (
-                              <div className={`w-14 h-14 rounded-full flex items-center justify-center ${
-                                isPassed ? 'bg-[#22C55E]' : 'bg-[#EF4444]'
-                              }`}>
-                                <span className="text-white text-sm font-bold font-['Poppins']">
-                                  {scorePercentage}%
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                            <h4 className="font-['Syne'] font-bold text-gray-800 text-lg mb-4 leading-snug min-h-[3.5rem] line-clamp-2">
+                              {test.title}
+                            </h4>
 
-                          <h4 className="font-['Syne'] font-semibold text-black text-base mb-4 leading-snug min-h-[2.5rem] line-clamp-2">
-                            {test.title}
-                          </h4>
-
-                          <div className="mb-4">
-                            {test.status === 'in_progress' && (
-                              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F59E0B] text-white text-sm font-['Poppins'] rounded-full">
-                                <Clock className="w-3.5 h-3.5" />
-                                In Progress
-                              </span>
-                            )}
-                            {test.status === 'completed' && (
-                              <span className={`inline-flex items-center gap-2 px-3 py-1.5 ${
-                                isPassed ? 'bg-[#22C55E]' : 'bg-[#EF4444]'
-                              } text-white text-sm font-['Poppins'] rounded-full`}>
-                                {isPassed ? (
-                                  <>
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
-                                    Passed
-                                  </>
-                                ) : (
-                                  <>
-                                    <XCircle className="w-3.5 h-3.5" />
-                                    Failed
-                                  </>
-                                )}
-                              </span>
-                            )}
-                            {test.status === 'pending_result' && (
-                              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#3B82F6] text-white text-sm font-['Poppins'] rounded-full">
-                                <Clock className="w-3.5 h-3.5" />
-                                Pending Result
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                            <div className="flex items-center gap-2 text-sm text-gray-500 font-['Syne']">
-                              <Calendar className="w-4 h-4" />
-                              <span>{new Date(test.created_at).toLocaleDateString()}</span>
+                            <div className="flex items-center gap-2 mb-5">
+                              {test.status === 'in_progress' && (
+                                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-400 text-white text-sm font-semibold font-['Poppins'] rounded-xl shadow-md">
+                                  <Clock className="w-4 h-4" />
+                                  In Progress
+                                </div>
+                              )}
+                              {test.status === 'completed' && (
+                                <div className={`flex items-center gap-2 px-4 py-2 ${
+                                  isPassed
+                                    ? 'bg-gradient-to-r from-green-400 to-emerald-500'
+                                    : 'bg-gradient-to-r from-red-400 to-rose-500'
+                                } text-white text-sm font-semibold font-['Poppins'] rounded-xl shadow-md`}>
+                                  {isPassed ? (
+                                    <>
+                                      <CheckCircle2 className="w-4 h-4" />
+                                      Passed
+                                    </>
+                                  ) : (
+                                    <>
+                                      <XCircle className="w-4 h-4" />
+                                      Failed
+                                    </>
+                                  )}
+                                </div>
+                              )}
+                              {test.status === 'pending_result' && (
+                                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-400 to-indigo-500 text-white text-sm font-semibold font-['Poppins'] rounded-xl shadow-md">
+                                  <Clock className="w-4 h-4" />
+                                  Pending Result
+                                </div>
+                              )}
                             </div>
-                            {test.status === 'completed' && (
-                              <div className="flex items-center gap-2 text-sm font-medium text-gray-700 font-['Poppins']">
-                                <CheckCircle2 className="w-4 h-4" />
-                                <span>{test.score}/{test.max_score}</span>
+
+                            <div className="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                              <div className="flex items-center gap-2 text-sm text-gray-600 font-medium font-['Syne']">
+                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                  <Calendar className="w-4 h-4 text-gray-600" />
+                                </div>
+                                <span>{new Date(test.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                               </div>
-                            )}
+                              {test.status === 'completed' && (
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg">
+                                  <CheckCircle2 className={`w-4 h-4 ${isPassed ? 'text-green-600' : 'text-red-600'}`} />
+                                  <span className="text-sm font-bold text-gray-700 font-['Poppins']">
+                                    {test.score}/{test.max_score}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       );
