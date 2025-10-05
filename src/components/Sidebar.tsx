@@ -103,13 +103,29 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               <span>Tests</span>
             </Link>
 
-            <a
-              href="#"
-              className="flex items-center gap-4 lg:gap-5 text-base lg:text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors"
+            <Link
+              to="/profile"
+              onClick={onClose}
+              className={`flex items-center gap-4 lg:gap-5 text-base lg:text-lg font-['Syne'] font-medium transition-colors ${
+                isActive('/profile')
+                  ? 'text-transparent bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text'
+                  : 'text-black hover:text-purple-600'
+              }`}
             >
-              <User className="w-5 h-5 lg:w-6 lg:h-6" />
+              <User
+                className="w-5 h-5 lg:w-6 lg:h-6"
+                style={isActive('/profile') ? { stroke: 'url(#gradient3)' } : {}}
+              />
+              <svg width="0" height="0">
+                <defs>
+                  <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="13.4%" stopColor="#B33DEB" />
+                    <stop offset="86.6%" stopColor="#DE8FFF" />
+                  </linearGradient>
+                </defs>
+              </svg>
               <span>Profile</span>
-            </a>
+            </Link>
 
             <a
               href="#"
@@ -122,13 +138,29 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         </div>
 
         <div className="space-y-4 lg:space-y-6">
-          <a
-            href="#"
-            className="flex items-center gap-4 lg:gap-5 text-base lg:text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors"
+          <Link
+            to="/settings"
+            onClick={onClose}
+            className={`flex items-center gap-4 lg:gap-5 text-base lg:text-lg font-['Syne'] font-medium transition-colors ${
+              isActive('/settings')
+                ? 'text-transparent bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text'
+                : 'text-black hover:text-purple-600'
+            }`}
           >
-            <Settings className="w-5 h-5 lg:w-6 lg:h-6" />
+            <Settings
+              className="w-5 h-5 lg:w-6 lg:h-6"
+              style={isActive('/settings') ? { stroke: 'url(#gradient4)' } : {}}
+            />
+            <svg width="0" height="0">
+              <defs>
+                <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="13.4%" stopColor="#B33DEB" />
+                  <stop offset="86.6%" stopColor="#DE8FFF" />
+                </linearGradient>
+              </defs>
+            </svg>
             <span>Settings</span>
-          </a>
+          </Link>
 
           <button
             onClick={handleLogout}

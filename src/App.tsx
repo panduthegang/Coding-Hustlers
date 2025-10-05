@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import Tests from './pages/Tests';
 import MCQTest from './pages/MCQTest';
 import CodingTest from './pages/CodingTest';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -46,6 +48,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <CodingTest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
               </ProtectedRoute>
             }
           />
