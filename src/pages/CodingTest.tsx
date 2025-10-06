@@ -5,13 +5,15 @@ import { useAuth } from '../contexts/AuthContext';
 import { generateCodingProblem, evaluateCode } from '../lib/gemini';
 import { saveTestToFirestore, updateTestInFirestore, saveQuestionsToFirestore, updateQuestionInFirestore } from '../services/firestore';
 
+type SupportedLanguage = 'javascript' | 'python' | 'python3' | 'java' | 'c' | 'cpp' | 'csharp' | 'go' | 'rust' | 'kotlin';
+
 interface CodingProblem {
   title: string;
   description: string;
   examples: Array<{ input: string; output: string; explanation: string }>;
   constraints: string[];
   testCases: Array<{ input: string; expectedOutput: string }>;
-  starterCode: { javascript: string; python: string; java: string };
+  starterCode: Record<SupportedLanguage, string>;
 }
 
 const CodingTest = () => {
@@ -22,7 +24,7 @@ const CodingTest = () => {
 
   const [problem, setProblem] = useState<CodingProblem | null>(null);
   const [code, setCode] = useState('');
-  const [language, setLanguage] = useState<'javascript' | 'python' | 'java'>('javascript');
+  const [language, setLanguage] = useState<SupportedLanguage>('javascript');
   const [loading, setLoading] = useState(true);
   const [testId, setTestId] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(3600);
@@ -91,12 +93,29 @@ const CodingTest = () => {
     }
   };
 
-  const handleLanguageChange = (newLang: 'javascript' | 'python' | 'java') => {
+  const handleLanguageChange = (newLang: SupportedLanguage) => {
     setLanguage(newLang);
     if (problem) {
-      setCode(problem.starterCode[newLang]);
+      setCode(problem.starterCode[newLang] || '');
     }
   };
+
+  const cleanText = (text: string): string => {
+    return text.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+  };
+
+  const languageOptions: Array<{ value: SupportedLanguage; label: string; color: string }> = [
+    { value: 'javascript', label: 'JavaScript', color: 'bg-yellow-500' },
+    { value: 'python', label: 'Python', color: 'bg-blue-500' },
+    { value: 'python3', label: 'Python 3', color: 'bg-blue-600' },
+    { value: 'java', label: 'Java', color: 'bg-red-500' },
+    { value: 'c', label: 'C', color: 'bg-gray-600' },
+    { value: 'cpp', label: 'C++', color: 'bg-blue-700' },
+    { value: 'csharp', label: 'C#', color: 'bg-purple-600' },
+    { value: 'go', label: 'Go', color: 'bg-cyan-500' },
+    { value: 'rust', label: 'Rust', color: 'bg-orange-600' },
+    { value: 'kotlin', label: 'Kotlin', color: 'bg-violet-500' },
+  ];
 
   const handleSubmit = async () => {
     if (!problem || !testId) return;
@@ -231,7 +250,7 @@ const CodingTest = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-xl overflow-y-auto max-h-[400px] lg:max-h-[calc(100vh-200px)]">
             <h2 className="text-lg lg:text-2xl font-bold font-['Syne'] mb-4">Problem Description</h2>
-            <p className="text-sm lg:text-base text-gray-700 font-['Syne'] mb-6 whitespace-pre-wrap">{problem?.description}</p>
+            <p className="text-sm lg:text-base text-gray-700 font-['Syne'] mb-6 whitespace-pre-wrap">{problem?.description ? cleanText(problem.description) : ''}</p>
 
             {problem?.examples && problem.examples.length > 0 && (
               <div className="mb-6">
@@ -239,9 +258,9 @@ const CodingTest = () => {
                 {problem.examples.map((example, index) => (
                   <div key={index} className="bg-gray-50 rounded-lg p-4 mb-3">
                     <p className="font-semibold">Example {index + 1}:</p>
-                    <p className="text-sm mt-2"><strong>Input:</strong> {example.input}</p>
-                    <p className="text-sm"><strong>Output:</strong> {example.output}</p>
-                    {example.explanation && <p className="text-sm text-gray-600 mt-1">{example.explanation}</p>}
+                    <p className="text-sm mt-2"><strong>Input:</strong> {cleanText(example.input)}</p>
+                    <p className="text-sm"><strong>Output:</strong> {cleanText(example.output)}</p>
+                    {example.explanation && <p className="text-sm text-gray-600 mt-1">{cleanText(example.explanation)}</p>}
                   </div>
                 ))}
               </div>
@@ -252,7 +271,7 @@ const CodingTest = () => {
                 <h3 className="font-bold font-['Syne'] text-base lg:text-lg mb-3">Constraints:</h3>
                 <ul className="list-disc list-inside space-y-1">
                   {problem.constraints.map((constraint, index) => (
-                    <li key={index} className="text-gray-700 text-sm">{constraint}</li>
+                    <li key={index} className="text-gray-700 text-sm">{cleanText(constraint)}</li>
                   ))}
                 </ul>
               </div>
@@ -260,31 +279,33 @@ const CodingTest = () => {
           </div>
 
           <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-xl flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-2 flex-wrap">
-                {(['javascript', 'python', 'java'] as const).map((lang) => (
+            <div className="flex flex-col gap-4 mb-4">
+              <div className="flex flex-wrap gap-2">
+                {languageOptions.map((langOption) => (
                   <button
-                    key={lang}
-                    onClick={() => handleLanguageChange(lang)}
-                    className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg font-['Syne'] font-medium capitalize transition-colors text-sm lg:text-base ${
-                      language === lang
-                        ? 'bg-purple-600 text-white'
+                    key={langOption.value}
+                    onClick={() => handleLanguageChange(langOption.value)}
+                    className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg font-['Syne'] font-medium transition-all text-xs lg:text-sm ${
+                      language === langOption.value
+                        ? `${langOption.color} text-white shadow-lg scale-105`
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    {lang}
+                    {langOption.label}
                   </button>
                 ))}
               </div>
+              <div className="flex items-center justify-end">
 
-              <button
-                onClick={handleSubmit}
-                disabled={evaluating}
-                className="flex items-center gap-2 px-4 lg:px-6 py-2 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-lg font-['Syne'] font-medium hover:opacity-90 transition-opacity disabled:opacity-50 text-sm lg:text-base"
-              >
-                <Play className="w-4 h-4" />
-                {evaluating ? 'Evaluating...' : 'Submit Code'}
-              </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={evaluating}
+                  className="flex items-center gap-2 px-4 lg:px-6 py-2 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-lg font-['Syne'] font-medium hover:opacity-90 transition-opacity disabled:opacity-50 text-sm lg:text-base"
+                >
+                  <Play className="w-4 h-4" />
+                  {evaluating ? 'Evaluating...' : 'Submit Code'}
+                </button>
+              </div>
             </div>
 
             <textarea
