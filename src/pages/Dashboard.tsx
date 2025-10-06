@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Bell, ChevronDown, ChevronLeft, ChevronRight, Search, CreditCard as Edit, Calendar, CheckCircle2, XCircle, Clock, Code, Check, X } from 'lucide-react';
+import { FileText, ChevronDown, ChevronLeft, ChevronRight, CreditCard as Edit, Calendar, CheckCircle2, XCircle, Clock, Code, Check, X, User, Mail, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { type Test } from '../lib/localStorage';
@@ -20,6 +20,7 @@ const Dashboard = () => {
   });
   const [currentPage, setCurrentPage] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const testsPerPage = 2;
 
   const userName = currentUser?.displayName || 'User';
@@ -70,6 +71,16 @@ const Dashboard = () => {
     }
   };
 
+  const { logout } = useAuth();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Failed to log out', error);
+    }
+  };
+
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
@@ -95,34 +106,62 @@ const Dashboard = () => {
                 </h2>
               </div>
 
-              <div className="flex items-center gap-3 lg:gap-6 w-full lg:w-auto">
-                <div className="hidden sm:flex items-center gap-4 px-4 lg:px-6 py-3 lg:py-4 bg-[rgba(250,250,250,0.75)] rounded-2xl flex-1 lg:flex-none">
-                  <Search className="w-4 h-4 lg:w-5 lg:h-5" style={{ stroke: 'url(#gradient2)' }} />
-                  <svg width="0" height="0">
-                    <defs>
-                      <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="13.4%" stopColor="#B33DEB" />
-                        <stop offset="86.6%" stopColor="#DE8FFF" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    className="bg-transparent border-none outline-none font-['Syne'] text-black/50 w-20 lg:w-32"
-                  />
-                </div>
-
+              <div className="flex items-center gap-3 lg:gap-6 w-full lg:w-auto justify-end">
                 <div className="relative">
-                  <Bell className="w-5 h-5 lg:w-6 lg:h-6 text-black cursor-pointer hover:text-purple-600 transition-colors" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></div>
-                </div>
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex items-center gap-2 lg:gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                  >
+                    <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold shadow-lg">
+                      {userName[0]?.toUpperCase()}
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-black transition-transform ${
+                      showProfileDropdown ? 'rotate-180' : ''
+                    }`} />
+                  </button>
 
-                <div className="flex items-center gap-2 lg:gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold">
-                    {userName[0]?.toUpperCase()}
-                  </div>
-                  <ChevronDown className="w-4 h-4 text-black" />
+                  {showProfileDropdown && (
+                    <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden z-50">
+                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-6">
+                        <div className="flex items-center gap-4">
+                          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                            {userName[0]?.toUpperCase()}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-['Syne'] font-bold text-white text-lg truncate">
+                              {currentUser?.displayName || 'User'}
+                            </h3>
+                            <p className="font-['Syne'] text-white/90 text-sm truncate">
+                              {currentUser?.email}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-3">
+                        <Link
+                          to="/profile"
+                          onClick={() => setShowProfileDropdown(false)}
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors group"
+                        >
+                          <User className="w-5 h-5 text-gray-600 group-hover:text-purple-600 transition-colors" />
+                          <span className="font-['Syne'] font-medium text-gray-700 group-hover:text-purple-600 transition-colors">
+                            View Profile
+                          </span>
+                        </Link>
+
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 transition-colors group"
+                        >
+                          <LogOut className="w-5 h-5 text-gray-600 group-hover:text-red-600 transition-colors" />
+                          <span className="font-['Syne'] font-medium text-gray-700 group-hover:text-red-600 transition-colors">
+                            Log Out
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </header>

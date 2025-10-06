@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Clock, Award, ChevronRight, TrendingUp } from 'lucide-react';
+import { BookOpen, Clock, Award, ChevronRight, TrendingUp, Search, Filter, X } from 'lucide-react';
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 import { useAuth } from '../contexts/AuthContext';
 import { courses } from '../lib/courseData';
@@ -13,6 +13,9 @@ const Courses = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [progressMap, setProgressMap] = useState<Record<string, CourseProgress>>({});
   const [latestCourse, setLatestCourse] = useState<CourseProgress | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -45,6 +48,13 @@ const Courses = () => {
     }
   };
 
+  const filteredCourses = courses.filter(course => {
+    const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          course.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDifficulty = selectedDifficulty === 'all' || course.difficulty === selectedDifficulty;
+    return matchesSearch && matchesDifficulty;
+  });
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
       background: `
@@ -66,9 +76,62 @@ const Courses = () => {
             <h2 className="text-3xl lg:text-5xl font-bold font-['Syne'] text-black mb-2">
               Learning Courses
             </h2>
-            <p className="text-gray-600 font-['Syne'] text-base lg:text-lg">
+            <p className="text-gray-600 font-['Syne'] text-base lg:text-lg mb-6">
               Master programming skills with structured learning paths
             </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search courses..."
+                  className="w-full pl-12 pr-4 py-3 bg-white/80 backdrop-blur-sm border-2 border-white/40 rounded-xl focus:border-purple-400 focus:outline-none transition-colors font-['Syne'] text-gray-700"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                  className="w-full sm:w-auto px-6 py-3 bg-white/80 backdrop-blur-sm border-2 border-white/40 rounded-xl hover:border-purple-400 transition-colors font-['Syne'] font-medium text-gray-700 flex items-center gap-2 justify-center"
+                >
+                  <Filter className="w-5 h-5" />
+                  {selectedDifficulty === 'all' ? 'All Levels' : selectedDifficulty}
+                  <ChevronRight className={`w-4 h-4 transition-transform ${showFilterDropdown ? 'rotate-90' : ''}`} />
+                </button>
+
+                {showFilterDropdown && (
+                  <div className="absolute z-20 top-full mt-2 right-0 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
+                    {['all', 'Beginner', 'Intermediate', 'Advanced'].map((level) => (
+                      <button
+                        key={level}
+                        onClick={() => {
+                          setSelectedDifficulty(level);
+                          setShowFilterDropdown(false);
+                        }}
+                        className={`w-full px-4 py-3 text-left font-['Syne'] font-medium transition-colors ${
+                          selectedDifficulty === level
+                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                            : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {level === 'all' ? 'All Levels' : level}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </header>
 
           {latestCourse && (
@@ -115,8 +178,24 @@ const Courses = () => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {courses.map((course) => {
+          {filteredCourses.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-2xl font-bold font-['Syne'] text-gray-800 mb-2">No courses found</h3>
+              <p className="text-gray-600 font-['Syne'] mb-6">Try adjusting your search or filters</p>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedDifficulty('all');
+                }}
+                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-['Syne'] font-semibold hover:shadow-xl transition-all"
+              >
+                Clear Filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCourses.map((course) => {
               const progress = progressMap[course.id];
               const progressPercentage = getProgressPercentage(course.id, course.totalChapters);
               const isStarted = progress && progress.completedChapters.length > 0;
@@ -184,8 +263,9 @@ const Courses = () => {
                   </div>
                 </div>
               );
-            })}
-          </div>
+              })}
+            </div>
+          )}
         </main>
       </div>
     </div>

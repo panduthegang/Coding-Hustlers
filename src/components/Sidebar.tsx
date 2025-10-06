@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BarChart3, CreditCard as Edit, User, Trophy, Settings, LogOut, X, Menu, BookOpen } from 'lucide-react';
+import { BarChart3, CreditCard as Edit, User, Settings, LogOut, X, Menu, BookOpen } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -150,14 +150,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               </svg>
               <span>Profile</span>
             </Link>
-
-            <a
-              href="#"
-              className="flex items-center gap-4 lg:gap-5 text-base lg:text-lg font-['Syne'] font-medium text-black hover:text-purple-600 transition-colors"
-            >
-              <Trophy className="w-5 h-5 lg:w-6 lg:h-6" />
-              <span>Leaderboard</span>
-            </a>
           </nav>
         </div>
 

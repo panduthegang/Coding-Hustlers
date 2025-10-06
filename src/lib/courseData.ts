@@ -80,6 +80,106 @@ export const courses: Course[] = [
     difficulty: 'Beginner',
     totalChapters: 6,
     estimatedHours: 20
+  },
+  {
+    id: 'c',
+    title: 'C Programming',
+    description: 'Learn C from scratch including pointers, memory management, and system programming',
+    icon: '©️',
+    color: 'from-blue-600 to-indigo-700',
+    difficulty: 'Intermediate',
+    totalChapters: 10,
+    estimatedHours: 50
+  },
+  {
+    id: 'cpp',
+    title: 'C++ Programming',
+    description: 'Master C++ with OOP, STL, templates, and modern C++ features',
+    icon: '⚡',
+    color: 'from-blue-700 to-purple-700',
+    difficulty: 'Intermediate',
+    totalChapters: 12,
+    estimatedHours: 60
+  },
+  {
+    id: 'csharp',
+    title: 'C# Development',
+    description: 'Learn C# for .NET development, desktop apps, and game development',
+    icon: '#️⃣',
+    color: 'from-purple-600 to-pink-600',
+    difficulty: 'Intermediate',
+    totalChapters: 11,
+    estimatedHours: 55
+  },
+  {
+    id: 'go',
+    title: 'Go Programming',
+    description: 'Master Go for building scalable backend systems and microservices',
+    icon: '🔵',
+    color: 'from-cyan-500 to-blue-500',
+    difficulty: 'Intermediate',
+    totalChapters: 9,
+    estimatedHours: 45
+  },
+  {
+    id: 'rust',
+    title: 'Rust Programming',
+    description: 'Learn Rust for safe, concurrent, and high-performance systems programming',
+    icon: '🦀',
+    color: 'from-orange-600 to-red-600',
+    difficulty: 'Advanced',
+    totalChapters: 11,
+    estimatedHours: 60
+  },
+  {
+    id: 'kotlin',
+    title: 'Kotlin Development',
+    description: 'Master Kotlin for Android development and multiplatform applications',
+    icon: '🎯',
+    color: 'from-violet-500 to-purple-600',
+    difficulty: 'Intermediate',
+    totalChapters: 10,
+    estimatedHours: 50
+  },
+  {
+    id: 'typescript',
+    title: 'TypeScript',
+    description: 'Learn TypeScript for type-safe JavaScript development and better tooling',
+    icon: '📘',
+    color: 'from-blue-500 to-blue-700',
+    difficulty: 'Intermediate',
+    totalChapters: 8,
+    estimatedHours: 40
+  },
+  {
+    id: 'flutter',
+    title: 'Flutter Development',
+    description: 'Build cross-platform mobile apps with Flutter and Dart',
+    icon: '🎨',
+    color: 'from-sky-400 to-blue-500',
+    difficulty: 'Intermediate',
+    totalChapters: 10,
+    estimatedHours: 50
+  },
+  {
+    id: 'devops',
+    title: 'DevOps & CI/CD',
+    description: 'Master DevOps practices, Docker, Kubernetes, and deployment automation',
+    icon: '🚀',
+    color: 'from-teal-500 to-green-600',
+    difficulty: 'Advanced',
+    totalChapters: 12,
+    estimatedHours: 65
+  },
+  {
+    id: 'ml',
+    title: 'Machine Learning',
+    description: 'Learn ML algorithms, neural networks, and AI model development',
+    icon: '🤖',
+    color: 'from-pink-500 to-rose-600',
+    difficulty: 'Advanced',
+    totalChapters: 14,
+    estimatedHours: 75
   }
 ];
 
