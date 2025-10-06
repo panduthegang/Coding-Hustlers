@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BarChart3, CreditCard as Edit, User, Trophy, Settings, LogOut, X, Menu } from 'lucide-react';
+import { BarChart3, CreditCard as Edit, User, Trophy, Settings, LogOut, X, Menu, BookOpen } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -80,6 +80,30 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             </Link>
 
             <Link
+              to="/courses"
+              onClick={onClose}
+              className={`flex items-center gap-4 lg:gap-5 text-base lg:text-lg font-['Syne'] font-medium transition-colors ${
+                isActive('/courses')
+                  ? 'text-transparent bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text'
+                  : 'text-black hover:text-purple-600'
+              }`}
+            >
+              <BookOpen
+                className="w-5 h-5 lg:w-6 lg:h-6"
+                style={isActive('/courses') ? { stroke: 'url(#gradient2)' } : {}}
+              />
+              <svg width="0" height="0">
+                <defs>
+                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="13.4%" stopColor="#B33DEB" />
+                    <stop offset="86.6%" stopColor="#DE8FFF" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span>Courses</span>
+            </Link>
+
+            <Link
               to="/tests"
               onClick={onClose}
               className={`flex items-center gap-4 lg:gap-5 text-base lg:text-lg font-['Syne'] font-medium transition-colors ${
@@ -90,11 +114,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             >
               <Edit
                 className="w-5 h-5 lg:w-6 lg:h-6"
-                style={isActive('/tests') ? { stroke: 'url(#gradient2)' } : {}}
+                style={isActive('/tests') ? { stroke: 'url(#gradient3)' } : {}}
               />
               <svg width="0" height="0">
                 <defs>
-                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="13.4%" stopColor="#B33DEB" />
                     <stop offset="86.6%" stopColor="#DE8FFF" />
                   </linearGradient>
@@ -114,11 +138,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             >
               <User
                 className="w-5 h-5 lg:w-6 lg:h-6"
-                style={isActive('/profile') ? { stroke: 'url(#gradient3)' } : {}}
+                style={isActive('/profile') ? { stroke: 'url(#gradient4)' } : {}}
               />
               <svg width="0" height="0">
                 <defs>
-                  <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="13.4%" stopColor="#B33DEB" />
                     <stop offset="86.6%" stopColor="#DE8FFF" />
                   </linearGradient>
@@ -149,11 +173,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           >
             <Settings
               className="w-5 h-5 lg:w-6 lg:h-6"
-              style={isActive('/settings') ? { stroke: 'url(#gradient4)' } : {}}
+              style={isActive('/settings') ? { stroke: 'url(#gradient5)' } : {}}
             />
             <svg width="0" height="0">
               <defs>
-                <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="13.4%" stopColor="#B33DEB" />
                   <stop offset="86.6%" stopColor="#DE8FFF" />
                 </linearGradient>

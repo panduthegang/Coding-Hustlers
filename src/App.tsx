@@ -9,6 +9,9 @@ import MCQTest from './pages/MCQTest';
 import CodingTest from './pages/CodingTest';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import Courses from './pages/Courses';
+import CourseDetail from './pages/CourseDetail';
+import ChapterTest from './pages/ChapterTest';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -48,6 +51,30 @@ function App() {
             element={
               <ProtectedRoute>
                 <CodingTest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/courses"
+            element={
+              <ProtectedRoute>
+                <Courses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/course/:courseId"
+            element={
+              <ProtectedRoute>
+                <CourseDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/course/:courseId/chapter/:chapterId"
+            element={
+              <ProtectedRoute>
+                <ChapterTest />
               </ProtectedRoute>
             }
           />

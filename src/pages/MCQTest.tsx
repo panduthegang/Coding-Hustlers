@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { generateMCQQuestions } from '../lib/gemini';
+import { generateTestQuestions } from '../lib/gemini';
 import { saveTestToFirestore, updateTestInFirestore, saveQuestionsToFirestore, updateQuestionInFirestore } from '../services/firestore';
 
 interface Question {
@@ -56,7 +56,7 @@ const MCQTest = () => {
   const loadQuestions = async () => {
     try {
       setLoading(true);
-      const generatedQuestions = await generateMCQQuestions(topic, difficulty, 10);
+      const generatedQuestions = await generateTestQuestions(topic, difficulty, 10);
       setQuestions(generatedQuestions);
 
       const testId = await saveTestToFirestore({
