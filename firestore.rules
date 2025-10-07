@@ -19,9 +19,8 @@ service cloud.firestore {
     match /profiles/{uid} {
       // Allow read if:
       // 1. User is reading their own profile, OR
-      // 2. The profile is public
-      allow read: if isOwner(uid) ||
-                     (isAuthenticated() && resource.data.publicProfile == true);
+      // 2. User is authenticated (profiles are readable by all authenticated users)
+      allow read: if isOwner(uid) || isAuthenticated();
 
       // Allow create only if:
       // 1. User is authenticated and creating their own profile
@@ -64,8 +63,12 @@ service cloud.firestore {
     // Tests collection
     // - Users can only access their own tests
     match /tests/{testId} {
-      // Only owner can read their tests
-      allow read: if isAuthenticated() && resource.data.user_id == request.auth.uid;
+      // Allow read if:
+      // 1. User is authenticated AND
+      // 2. Either the document doesn't exist yet OR the user_id matches
+      allow read: if isAuthenticated() &&
+                     (!exists(/databases/$(database)/documents/tests/$(testId)) ||
+                      resource.data.user_id == request.auth.uid);
 
       // Only owner can create their tests
       allow create: if isAuthenticated() &&
@@ -76,7 +79,7 @@ service cloud.firestore {
       // Only owner can update their tests
       allow update: if isAuthenticated() &&
                        resource.data.user_id == request.auth.uid &&
-                       request.resource.data.user_id == resource.data.user_id;
+                       request.resource.data.user_id == request.auth.uid;
 
       // Prevent deletion
       allow delete: if false;
@@ -91,8 +94,12 @@ service cloud.firestore {
                get(/databases/$(database)/documents/tests/$(testId)).data.user_id == request.auth.uid;
       }
 
-      // Only owner of the test can read questions
-      allow read: if isAuthenticated() && ownsTest(resource.data.test_id);
+      // Allow read if:
+      // 1. User is authenticated AND
+      // 2. Either the document doesn't exist yet OR they own the test
+      allow read: if isAuthenticated() &&
+                     (!exists(/databases/$(database)/documents/questions/$(questionId)) ||
+                      ownsTest(resource.data.test_id));
 
       // Only owner of the test can create questions
       allow create: if isAuthenticated() && ownsTest(request.resource.data.test_id);
@@ -100,7 +107,7 @@ service cloud.firestore {
       // Only owner of the test can update questions
       allow update: if isAuthenticated() &&
                        ownsTest(resource.data.test_id) &&
-                       request.resource.data.test_id == resource.data.test_id;
+                       request.resource.data.test_id == request.auth.uid;
 
       // Prevent deletion
       allow delete: if false;
@@ -110,17 +117,15 @@ service cloud.firestore {
     // - Users can only access their own course progress
     // - Document ID format: {userId}_{courseId}
     match /courseProgress/{progressId} {
-      // Helper to check if progressId belongs to the user
-      function ownsProgress() {
-        return isAuthenticated() && progressId.split('_')[0] == request.auth.uid;
-      }
-
-      // Only owner can read their progress (check by document ID pattern)
-      allow read: if ownsProgress();
+      // Allow read if:
+      // 1. User is authenticated AND
+      // 2. Either the document doesn't exist yet OR the userId matches
+      allow read: if isAuthenticated() &&
+                     (!exists(/databases/$(database)/documents/courseProgress/$(progressId)) ||
+                      resource.data.userId == request.auth.uid);
 
       // Only owner can create their progress
       allow create: if isAuthenticated() &&
-                       ownsProgress() &&
                        request.resource.data.userId == request.auth.uid &&
                        request.resource.data.courseId is string &&
                        request.resource.data.currentChapter is number &&
@@ -128,11 +133,9 @@ service cloud.firestore {
                        request.resource.data.status in ['not_started', 'in_progress', 'completed'];
 
       // Only owner can update their progress
-      // Cannot change userId or courseId
       allow update: if isAuthenticated() &&
-                       ownsProgress() &&
-                       request.resource.data.userId == resource.data.userId &&
-                       request.resource.data.courseId == resource.data.courseId;
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == request.auth.uid;
 
       // Prevent deletion
       allow delete: if false;

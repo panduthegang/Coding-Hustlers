@@ -14,7 +14,9 @@ const Courses = () => {
   const [latestCourse, setLatestCourse] = useState<CourseProgress | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [stats, setStats] = useState({ enrolled: 0, inProgress: 0, completed: 0 });
   const [loading, setLoading] = useState(true);
 
@@ -68,7 +70,17 @@ const Courses = () => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           course.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDifficulty = selectedDifficulty === 'all' || course.difficulty === selectedDifficulty;
-    return matchesSearch && matchesDifficulty;
+
+    const progress = progressMap[course.id];
+    let matchesStatus = true;
+
+    if (selectedStatus === 'enrolled') {
+      matchesStatus = !!progress;
+    } else if (selectedStatus === 'completed') {
+      matchesStatus = progress?.status === 'completed';
+    }
+
+    return matchesSearch && matchesDifficulty && matchesStatus;
   });
 
   return (
@@ -149,6 +161,42 @@ const Courses = () => {
                   >
                     <X className="w-5 h-5" />
                   </button>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                  className="w-full sm:w-auto px-6 py-3 bg-white/80 backdrop-blur-sm border-2 border-white/40 rounded-xl hover:border-blue-400 transition-colors font-['Syne'] font-medium text-gray-700 flex items-center gap-2 justify-center"
+                >
+                  <Filter className="w-5 h-5" />
+                  {selectedStatus === 'all' ? 'All Courses' : selectedStatus === 'enrolled' ? 'Enrolled' : 'Completed'}
+                  <ChevronRight className={`w-4 h-4 transition-transform ${showStatusDropdown ? 'rotate-90' : ''}`} />
+                </button>
+
+                {showStatusDropdown && (
+                  <div className="absolute z-20 top-full mt-2 right-0 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
+                    {[
+                      { value: 'all', label: 'All Courses' },
+                      { value: 'enrolled', label: 'Enrolled' },
+                      { value: 'completed', label: 'Completed' }
+                    ].map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSelectedStatus(option.value);
+                          setShowStatusDropdown(false);
+                        }}
+                        className={`w-full px-4 py-3 text-left font-['Syne'] font-medium transition-colors ${
+                          selectedStatus === option.value
+                            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
+                            : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
 
@@ -244,6 +292,7 @@ const Courses = () => {
                 onClick={() => {
                   setSearchQuery('');
                   setSelectedDifficulty('all');
+                  setSelectedStatus('all');
                 }}
                 className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-['Syne'] font-semibold hover:shadow-xl transition-all"
               >
