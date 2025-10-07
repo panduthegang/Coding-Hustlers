@@ -979,5 +979,1095 @@ export const chapters: Record<string, Chapter[]> = {
       testType: 'coding',
       difficulty: 'Medium'
     }
+  ],
+  c: [
+    {
+      id: 'c-1',
+      courseId: 'c',
+      title: 'C Basics',
+      description: 'Syntax, variables, data types, and operators',
+      order: 1,
+      content: 'Learn C programming fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'c-2',
+      courseId: 'c',
+      title: 'Control Flow',
+      description: 'If-else, switch, loops',
+      order: 2,
+      content: 'Master control structures in C.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'c-3',
+      courseId: 'c',
+      title: 'Functions',
+      description: 'Function declaration, definition, and recursion',
+      order: 3,
+      content: 'Work with functions in C.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'c-4',
+      courseId: 'c',
+      title: 'Arrays & Strings',
+      description: 'Array manipulation and string handling',
+      order: 4,
+      content: 'Learn arrays and strings.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'c-5',
+      courseId: 'c',
+      title: 'Pointers',
+      description: 'Pointer basics, pointer arithmetic',
+      order: 5,
+      content: 'Master pointer concepts.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'c-6',
+      courseId: 'c',
+      title: 'Memory Management',
+      description: 'malloc, calloc, free, and memory allocation',
+      order: 6,
+      content: 'Manage memory dynamically.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'c-7',
+      courseId: 'c',
+      title: 'Structures & Unions',
+      description: 'Custom data types and structures',
+      order: 7,
+      content: 'Create complex data structures.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'c-8',
+      courseId: 'c',
+      title: 'File I/O',
+      description: 'Reading and writing files in C',
+      order: 8,
+      content: 'Work with files.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'c-9',
+      courseId: 'c',
+      title: 'Preprocessor Directives',
+      description: 'Macros, includes, and conditional compilation',
+      order: 9,
+      content: 'Use preprocessor features.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'c-10',
+      courseId: 'c',
+      title: 'Advanced C',
+      description: 'Bit manipulation, advanced pointers, system programming',
+      order: 10,
+      content: 'Master advanced C concepts.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  cpp: [
+    {
+      id: 'cpp-1',
+      courseId: 'cpp',
+      title: 'C++ Basics',
+      description: 'Syntax, variables, and basic I/O',
+      order: 1,
+      content: 'Get started with C++.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'cpp-2',
+      courseId: 'cpp',
+      title: 'Object-Oriented Programming',
+      description: 'Classes, objects, and encapsulation',
+      order: 2,
+      content: 'Learn OOP in C++.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'cpp-3',
+      courseId: 'cpp',
+      title: 'Inheritance & Polymorphism',
+      description: 'Inheritance, virtual functions, and polymorphism',
+      order: 3,
+      content: 'Master inheritance concepts.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'cpp-4',
+      courseId: 'cpp',
+      title: 'Operator Overloading',
+      description: 'Overloading operators and friend functions',
+      order: 4,
+      content: 'Customize operators.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'cpp-5',
+      courseId: 'cpp',
+      title: 'Templates',
+      description: 'Function and class templates',
+      order: 5,
+      content: 'Use generic programming.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'cpp-6',
+      courseId: 'cpp',
+      title: 'STL Basics',
+      description: 'Vectors, lists, maps, and sets',
+      order: 6,
+      content: 'Work with STL containers.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'cpp-7',
+      courseId: 'cpp',
+      title: 'STL Algorithms',
+      description: 'Sort, find, transform, and algorithms',
+      order: 7,
+      content: 'Use STL algorithms.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'cpp-8',
+      courseId: 'cpp',
+      title: 'Exception Handling',
+      description: 'Try, catch, throw, and exception classes',
+      order: 8,
+      content: 'Handle errors in C++.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'cpp-9',
+      courseId: 'cpp',
+      title: 'Smart Pointers',
+      description: 'unique_ptr, shared_ptr, and memory management',
+      order: 9,
+      content: 'Use modern C++ memory management.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'cpp-10',
+      courseId: 'cpp',
+      title: 'Move Semantics',
+      description: 'Rvalue references and move constructors',
+      order: 10,
+      content: 'Optimize with move semantics.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'cpp-11',
+      courseId: 'cpp',
+      title: 'Lambda Expressions',
+      description: 'Lambda functions and captures',
+      order: 11,
+      content: 'Use lambda functions.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'cpp-12',
+      courseId: 'cpp',
+      title: 'Modern C++ Features',
+      description: 'C++11/14/17/20 features',
+      order: 12,
+      content: 'Master modern C++.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  csharp: [
+    {
+      id: 'csharp-1',
+      courseId: 'csharp',
+      title: 'C# Basics',
+      description: 'Syntax, variables, and data types',
+      order: 1,
+      content: 'Learn C# fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'csharp-2',
+      courseId: 'csharp',
+      title: 'Control Structures',
+      description: 'If, switch, loops, and control flow',
+      order: 2,
+      content: 'Master control structures.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'csharp-3',
+      courseId: 'csharp',
+      title: 'Object-Oriented Programming',
+      description: 'Classes, objects, and inheritance',
+      order: 3,
+      content: 'Learn OOP in C#.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'csharp-4',
+      courseId: 'csharp',
+      title: 'Properties & Indexers',
+      description: 'Properties, auto-properties, and indexers',
+      order: 4,
+      content: 'Use properties effectively.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'csharp-5',
+      courseId: 'csharp',
+      title: 'Delegates & Events',
+      description: 'Delegates, events, and event handling',
+      order: 5,
+      content: 'Work with delegates and events.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'csharp-6',
+      courseId: 'csharp',
+      title: 'LINQ',
+      description: 'Language Integrated Query',
+      order: 6,
+      content: 'Query data with LINQ.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'csharp-7',
+      courseId: 'csharp',
+      title: 'Async & Await',
+      description: 'Asynchronous programming',
+      order: 7,
+      content: 'Write async code.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'csharp-8',
+      courseId: 'csharp',
+      title: 'Collections',
+      description: 'Lists, dictionaries, and generic collections',
+      order: 8,
+      content: 'Use collection types.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'csharp-9',
+      courseId: 'csharp',
+      title: 'Exception Handling',
+      description: 'Try-catch, custom exceptions',
+      order: 9,
+      content: 'Handle errors properly.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'csharp-10',
+      courseId: 'csharp',
+      title: 'File I/O',
+      description: 'Reading and writing files',
+      order: 10,
+      content: 'Work with files.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'csharp-11',
+      courseId: 'csharp',
+      title: 'Advanced C#',
+      description: 'Attributes, reflection, and advanced features',
+      order: 11,
+      content: 'Master advanced C# concepts.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    }
+  ],
+  go: [
+    {
+      id: 'go-1',
+      courseId: 'go',
+      title: 'Go Basics',
+      description: 'Syntax, variables, and types',
+      order: 1,
+      content: 'Get started with Go.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'go-2',
+      courseId: 'go',
+      title: 'Control Structures',
+      description: 'If, for, switch statements',
+      order: 2,
+      content: 'Master control flow in Go.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'go-3',
+      courseId: 'go',
+      title: 'Functions',
+      description: 'Function definition and multiple returns',
+      order: 3,
+      content: 'Work with Go functions.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'go-4',
+      courseId: 'go',
+      title: 'Structs & Interfaces',
+      description: 'Custom types and interfaces',
+      order: 4,
+      content: 'Use structs and interfaces.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'go-5',
+      courseId: 'go',
+      title: 'Goroutines',
+      description: 'Concurrent programming with goroutines',
+      order: 5,
+      content: 'Learn concurrent programming.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'go-6',
+      courseId: 'go',
+      title: 'Channels',
+      description: 'Communication between goroutines',
+      order: 6,
+      content: 'Use channels for communication.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'go-7',
+      courseId: 'go',
+      title: 'Error Handling',
+      description: 'Error handling patterns in Go',
+      order: 7,
+      content: 'Handle errors the Go way.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'go-8',
+      courseId: 'go',
+      title: 'Testing',
+      description: 'Unit testing and benchmarking',
+      order: 8,
+      content: 'Test your Go code.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'go-9',
+      courseId: 'go',
+      title: 'Advanced Go',
+      description: 'Context, reflection, and advanced patterns',
+      order: 9,
+      content: 'Master advanced Go concepts.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    }
+  ],
+  rust: [
+    {
+      id: 'rust-1',
+      courseId: 'rust',
+      title: 'Rust Basics',
+      description: 'Variables, data types, and ownership',
+      order: 1,
+      content: 'Learn Rust fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'rust-2',
+      courseId: 'rust',
+      title: 'Ownership & Borrowing',
+      description: 'Memory management and borrowing rules',
+      order: 2,
+      content: 'Master Rust ownership.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'rust-3',
+      courseId: 'rust',
+      title: 'Structs & Enums',
+      description: 'Custom data types',
+      order: 3,
+      content: 'Work with structs and enums.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'rust-4',
+      courseId: 'rust',
+      title: 'Pattern Matching',
+      description: 'Match expressions and patterns',
+      order: 4,
+      content: 'Use pattern matching.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'rust-5',
+      courseId: 'rust',
+      title: 'Error Handling',
+      description: 'Result, Option, and error propagation',
+      order: 5,
+      content: 'Handle errors in Rust.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'rust-6',
+      courseId: 'rust',
+      title: 'Traits',
+      description: 'Defining and implementing traits',
+      order: 6,
+      content: 'Use traits for abstraction.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'rust-7',
+      courseId: 'rust',
+      title: 'Lifetimes',
+      description: 'Lifetime annotations and references',
+      order: 7,
+      content: 'Understand lifetimes.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'rust-8',
+      courseId: 'rust',
+      title: 'Collections',
+      description: 'Vectors, HashMaps, and other collections',
+      order: 8,
+      content: 'Work with collections.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'rust-9',
+      courseId: 'rust',
+      title: 'Concurrency',
+      description: 'Threads and message passing',
+      order: 9,
+      content: 'Write concurrent code.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'rust-10',
+      courseId: 'rust',
+      title: 'Async Programming',
+      description: 'Async/await and futures',
+      order: 10,
+      content: 'Use async Rust.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'rust-11',
+      courseId: 'rust',
+      title: 'Advanced Rust',
+      description: 'Unsafe code, macros, and advanced features',
+      order: 11,
+      content: 'Master advanced Rust.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    }
+  ],
+  kotlin: [
+    {
+      id: 'kotlin-1',
+      courseId: 'kotlin',
+      title: 'Kotlin Basics',
+      description: 'Variables, types, and basic syntax',
+      order: 1,
+      content: 'Learn Kotlin fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'kotlin-2',
+      courseId: 'kotlin',
+      title: 'Functions & Lambdas',
+      description: 'Functions, lambdas, and higher-order functions',
+      order: 2,
+      content: 'Master Kotlin functions.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'kotlin-3',
+      courseId: 'kotlin',
+      title: 'Classes & Objects',
+      description: 'OOP in Kotlin',
+      order: 3,
+      content: 'Learn OOP concepts.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'kotlin-4',
+      courseId: 'kotlin',
+      title: 'Null Safety',
+      description: 'Handling nulls safely',
+      order: 4,
+      content: 'Work with null safety.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'kotlin-5',
+      courseId: 'kotlin',
+      title: 'Collections',
+      description: 'Lists, sets, maps, and collection operations',
+      order: 5,
+      content: 'Use Kotlin collections.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'kotlin-6',
+      courseId: 'kotlin',
+      title: 'Coroutines',
+      description: 'Asynchronous programming with coroutines',
+      order: 6,
+      content: 'Learn coroutines.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'kotlin-7',
+      courseId: 'kotlin',
+      title: 'Extension Functions',
+      description: 'Extending existing classes',
+      order: 7,
+      content: 'Use extension functions.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'kotlin-8',
+      courseId: 'kotlin',
+      title: 'Android Development',
+      description: 'Building Android apps with Kotlin',
+      order: 8,
+      content: 'Create Android applications.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'kotlin-9',
+      courseId: 'kotlin',
+      title: 'Data Classes',
+      description: 'Working with data classes',
+      order: 9,
+      content: 'Use data classes effectively.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'kotlin-10',
+      courseId: 'kotlin',
+      title: 'Advanced Kotlin',
+      description: 'Sealed classes, delegation, and advanced features',
+      order: 10,
+      content: 'Master advanced Kotlin.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  typescript: [
+    {
+      id: 'ts-1',
+      courseId: 'typescript',
+      title: 'TypeScript Basics',
+      description: 'Types, interfaces, and basic syntax',
+      order: 1,
+      content: 'Learn TypeScript fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'ts-2',
+      courseId: 'typescript',
+      title: 'Type Annotations',
+      description: 'Annotating types and type inference',
+      order: 2,
+      content: 'Use type annotations.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'ts-3',
+      courseId: 'typescript',
+      title: 'Interfaces',
+      description: 'Defining and using interfaces',
+      order: 3,
+      content: 'Work with interfaces.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ts-4',
+      courseId: 'typescript',
+      title: 'Classes',
+      description: 'TypeScript classes and access modifiers',
+      order: 4,
+      content: 'Use TypeScript classes.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ts-5',
+      courseId: 'typescript',
+      title: 'Generics',
+      description: 'Generic types and functions',
+      order: 5,
+      content: 'Master generics.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ts-6',
+      courseId: 'typescript',
+      title: 'Advanced Types',
+      description: 'Union, intersection, and mapped types',
+      order: 6,
+      content: 'Use advanced type features.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ts-7',
+      courseId: 'typescript',
+      title: 'Modules',
+      description: 'Import, export, and module systems',
+      order: 7,
+      content: 'Work with modules.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ts-8',
+      courseId: 'typescript',
+      title: 'TypeScript with React',
+      description: 'Using TypeScript in React applications',
+      order: 8,
+      content: 'Build type-safe React apps.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  flutter: [
+    {
+      id: 'flutter-1',
+      courseId: 'flutter',
+      title: 'Flutter Basics',
+      description: 'Widgets, layouts, and app structure',
+      order: 1,
+      content: 'Learn Flutter fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'flutter-2',
+      courseId: 'flutter',
+      title: 'Dart Language',
+      description: 'Dart syntax and features',
+      order: 2,
+      content: 'Master Dart programming.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'flutter-3',
+      courseId: 'flutter',
+      title: 'Stateful Widgets',
+      description: 'Managing state in Flutter',
+      order: 3,
+      content: 'Work with stateful widgets.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'flutter-4',
+      courseId: 'flutter',
+      title: 'Navigation',
+      description: 'Routes and navigation',
+      order: 4,
+      content: 'Navigate between screens.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'flutter-5',
+      courseId: 'flutter',
+      title: 'Forms & Input',
+      description: 'Handling user input',
+      order: 5,
+      content: 'Create forms and handle input.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'flutter-6',
+      courseId: 'flutter',
+      title: 'State Management',
+      description: 'Provider, Riverpod, and state patterns',
+      order: 6,
+      content: 'Manage app state.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'flutter-7',
+      courseId: 'flutter',
+      title: 'Networking',
+      description: 'HTTP requests and APIs',
+      order: 7,
+      content: 'Connect to APIs.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'flutter-8',
+      courseId: 'flutter',
+      title: 'Local Storage',
+      description: 'SharedPreferences and databases',
+      order: 8,
+      content: 'Store data locally.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'flutter-9',
+      courseId: 'flutter',
+      title: 'Animations',
+      description: 'Creating animations in Flutter',
+      order: 9,
+      content: 'Animate your UI.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'flutter-10',
+      courseId: 'flutter',
+      title: 'Publishing Apps',
+      description: 'Building and deploying to app stores',
+      order: 10,
+      content: 'Publish your Flutter app.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    }
+  ],
+  devops: [
+    {
+      id: 'devops-1',
+      courseId: 'devops',
+      title: 'DevOps Fundamentals',
+      description: 'DevOps principles and culture',
+      order: 1,
+      content: 'Learn DevOps basics.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'devops-2',
+      courseId: 'devops',
+      title: 'Linux Basics',
+      description: 'Linux commands and administration',
+      order: 2,
+      content: 'Master Linux essentials.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'devops-3',
+      courseId: 'devops',
+      title: 'Version Control',
+      description: 'Git workflows and best practices',
+      order: 3,
+      content: 'Use Git effectively.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'devops-4',
+      courseId: 'devops',
+      title: 'Docker',
+      description: 'Containers and Docker basics',
+      order: 4,
+      content: 'Containerize applications.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'devops-5',
+      courseId: 'devops',
+      title: 'Kubernetes',
+      description: 'Container orchestration',
+      order: 5,
+      content: 'Deploy with Kubernetes.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'devops-6',
+      courseId: 'devops',
+      title: 'CI/CD',
+      description: 'Continuous integration and deployment',
+      order: 6,
+      content: 'Build CI/CD pipelines.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'devops-7',
+      courseId: 'devops',
+      title: 'Infrastructure as Code',
+      description: 'Terraform and IaC principles',
+      order: 7,
+      content: 'Manage infrastructure as code.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'devops-8',
+      courseId: 'devops',
+      title: 'Monitoring',
+      description: 'Prometheus, Grafana, and observability',
+      order: 8,
+      content: 'Monitor applications.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'devops-9',
+      courseId: 'devops',
+      title: 'Cloud Platforms',
+      description: 'AWS, Azure, and GCP',
+      order: 9,
+      content: 'Deploy to the cloud.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'devops-10',
+      courseId: 'devops',
+      title: 'Security',
+      description: 'DevSecOps and security best practices',
+      order: 10,
+      content: 'Secure your infrastructure.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'devops-11',
+      courseId: 'devops',
+      title: 'Configuration Management',
+      description: 'Ansible and configuration automation',
+      order: 11,
+      content: 'Automate configuration.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'devops-12',
+      courseId: 'devops',
+      title: 'Advanced DevOps',
+      description: 'Service mesh, GitOps, and advanced topics',
+      order: 12,
+      content: 'Master advanced DevOps.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  ml: [
+    {
+      id: 'ml-1',
+      courseId: 'ml',
+      title: 'Machine Learning Basics',
+      description: 'Introduction to ML and algorithms',
+      order: 1,
+      content: 'Get started with ML.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'ml-2',
+      courseId: 'ml',
+      title: 'Python for ML',
+      description: 'NumPy, Pandas, and data manipulation',
+      order: 2,
+      content: 'Use Python for ML.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'ml-3',
+      courseId: 'ml',
+      title: 'Linear Regression',
+      description: 'Linear models and regression',
+      order: 3,
+      content: 'Learn regression techniques.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ml-4',
+      courseId: 'ml',
+      title: 'Classification',
+      description: 'Logistic regression and classification',
+      order: 4,
+      content: 'Build classifiers.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ml-5',
+      courseId: 'ml',
+      title: 'Decision Trees',
+      description: 'Tree-based algorithms',
+      order: 5,
+      content: 'Use decision trees.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ml-6',
+      courseId: 'ml',
+      title: 'Neural Networks',
+      description: 'Introduction to neural networks',
+      order: 6,
+      content: 'Build neural networks.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-7',
+      courseId: 'ml',
+      title: 'Deep Learning',
+      description: 'CNNs, RNNs, and deep learning',
+      order: 7,
+      content: 'Master deep learning.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-8',
+      courseId: 'ml',
+      title: 'Natural Language Processing',
+      description: 'Text processing and NLP',
+      order: 8,
+      content: 'Process natural language.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-9',
+      courseId: 'ml',
+      title: 'Computer Vision',
+      description: 'Image processing and CV',
+      order: 9,
+      content: 'Work with images.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-10',
+      courseId: 'ml',
+      title: 'Unsupervised Learning',
+      description: 'Clustering and dimensionality reduction',
+      order: 10,
+      content: 'Learn unsupervised techniques.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-11',
+      courseId: 'ml',
+      title: 'Reinforcement Learning',
+      description: 'RL algorithms and applications',
+      order: 11,
+      content: 'Explore reinforcement learning.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-12',
+      courseId: 'ml',
+      title: 'Model Deployment',
+      description: 'Deploying ML models to production',
+      order: 12,
+      content: 'Deploy ML models.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-13',
+      courseId: 'ml',
+      title: 'MLOps',
+      description: 'ML operations and pipelines',
+      order: 13,
+      content: 'Manage ML workflows.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ml-14',
+      courseId: 'ml',
+      title: 'Advanced Topics',
+      description: 'GANs, transformers, and cutting-edge ML',
+      order: 14,
+      content: 'Master advanced ML.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
   ]
 };
