@@ -219,3 +219,185 @@ export const updateQuestionInFirestore = async (
     await updateDoc(doc(db, 'questions', questionDoc.id), updates);
   }
 };
+
+export interface CourseProgress {
+  userId: string;
+  courseId: string;
+  currentChapter: number;
+  completedChapters: number[];
+  chapterScores: Record<number, {
+    mcqScore: number;
+    codingScore: number;
+    completed: boolean;
+  }>;
+  status: 'not_started' | 'in_progress' | 'completed';
+  enrolledAt: Date;
+  lastAccessedAt: Date;
+  completedAt?: Date;
+}
+
+export const enrollInCourse = async (userId: string, courseId: string): Promise<void> => {
+  const progressRef = doc(db, 'courseProgress', `${userId}_${courseId}`);
+  const progressSnap = await getDoc(progressRef);
+
+  if (!progressSnap.exists()) {
+    await setDoc(progressRef, {
+      userId,
+      courseId,
+      currentChapter: 1,
+      completedChapters: [],
+      chapterScores: {},
+      status: 'in_progress',
+      enrolledAt: serverTimestamp(),
+      lastAccessedAt: serverTimestamp(),
+    });
+  }
+};
+
+export const getCourseProgress = async (
+  userId: string,
+  courseId: string
+): Promise<CourseProgress | null> => {
+  const progressRef = doc(db, 'courseProgress', `${userId}_${courseId}`);
+  const progressSnap = await getDoc(progressRef);
+
+  if (progressSnap.exists()) {
+    const data = progressSnap.data();
+    return {
+      ...data,
+      enrolledAt: convertTimestamp(data.enrolledAt),
+      lastAccessedAt: convertTimestamp(data.lastAccessedAt),
+      completedAt: data.completedAt ? convertTimestamp(data.completedAt) : undefined,
+    } as CourseProgress;
+  }
+  return null;
+};
+
+export const updateCourseProgress = async (
+  userId: string,
+  courseId: string,
+  updates: Partial<CourseProgress>
+): Promise<void> => {
+  const progressRef = doc(db, 'courseProgress', `${userId}_${courseId}`);
+  await updateDoc(progressRef, {
+    ...updates,
+    lastAccessedAt: serverTimestamp(),
+  });
+};
+
+export const saveChapterScore = async (
+  userId: string,
+  courseId: string,
+  chapterNumber: number,
+  mcqScore: number,
+  codingScore: number,
+  totalChapters: number
+): Promise<void> => {
+  try {
+    const progressRef = doc(db, 'courseProgress', `${userId}_${courseId}`);
+    let progressSnap = await getDoc(progressRef);
+
+    if (!progressSnap.exists()) {
+      console.log('Progress document does not exist, enrolling user...');
+      await enrollInCourse(userId, courseId);
+      progressSnap = await getDoc(progressRef);
+
+      if (!progressSnap.exists()) {
+        throw new Error('Failed to create progress document');
+      }
+    }
+
+    const data = progressSnap.data();
+    const chapterScores = data?.chapterScores || {};
+    const completedChapters = data?.completedChapters || [];
+
+    const passingMCQScore = 60;
+    const passingCodingScore = 60;
+    const chapterPassed = mcqScore >= passingMCQScore && codingScore >= passingCodingScore;
+
+    console.log('Saving chapter score:', { chapterNumber, mcqScore, codingScore, chapterPassed });
+
+    chapterScores[chapterNumber] = {
+      mcqScore,
+      codingScore,
+      completed: chapterPassed,
+    };
+
+    if (chapterPassed && !completedChapters.includes(chapterNumber)) {
+      completedChapters.push(chapterNumber);
+      completedChapters.sort((a, b) => a - b);
+    }
+
+    const allChaptersCompleted = completedChapters.length === totalChapters;
+    const courseStatus = allChaptersCompleted ? 'completed' : 'in_progress';
+
+    const updateData: Record<string, unknown> = {
+      chapterScores,
+      completedChapters,
+      status: courseStatus,
+      lastAccessedAt: serverTimestamp(),
+    };
+
+    if (chapterPassed && chapterNumber < totalChapters) {
+      updateData.currentChapter = chapterNumber + 1;
+    }
+
+    if (allChaptersCompleted) {
+      updateData.completedAt = serverTimestamp();
+    }
+
+    console.log('Updating progress with data:', updateData);
+    await updateDoc(progressRef, updateData);
+    console.log('Chapter score saved successfully!');
+  } catch (error) {
+    console.error('Error saving chapter score:', error);
+    throw error;
+  }
+};
+
+export const getUserCourseStats = async (userId: string) => {
+  const progressRef = collection(db, 'courseProgress');
+  const q = query(progressRef, where('userId', '==', userId));
+  const querySnapshot = await getDocs(q);
+
+  let enrolled = 0;
+  let inProgress = 0;
+  let completed = 0;
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    enrolled++;
+
+    if (data.status === 'completed') {
+      completed++;
+    } else if (data.status === 'in_progress') {
+      inProgress++;
+    }
+  });
+
+  return {
+    enrolled,
+    inProgress,
+    completed,
+  };
+};
+
+export const getAllUserCourseProgress = async (userId: string): Promise<Record<string, CourseProgress>> => {
+  const progressRef = collection(db, 'courseProgress');
+  const q = query(progressRef, where('userId', '==', userId));
+  const querySnapshot = await getDocs(q);
+
+  const progressMap: Record<string, CourseProgress> = {};
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    progressMap[data.courseId] = {
+      ...data,
+      enrolledAt: convertTimestamp(data.enrolledAt),
+      lastAccessedAt: convertTimestamp(data.lastAccessedAt),
+      completedAt: data.completedAt ? convertTimestamp(data.completedAt) : undefined,
+    } as CourseProgress;
+  });
+
+  return progressMap;
+};

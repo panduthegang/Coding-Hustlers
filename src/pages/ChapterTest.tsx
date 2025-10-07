@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Send, CheckCircle, XCircle, Trophy, Sparkles } from 'lucide-react';
+import { ArrowLeft, Send, CheckCircle, XCircle, Trophy, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { generateMCQQuestions, generateCodingChallenge, evaluateCodingChallenge } from '../lib/gemini';
-import { updateChapterCompletion } from '../lib/courseStorage';
+import { saveChapterScore } from '../services/firestore';
+import { courses } from '../lib/courseData';
 import type { Chapter, Course } from '../types/course';
 
 interface MCQQuestion {
@@ -36,6 +37,8 @@ const ChapterTest = () => {
   const [score, setScore] = useState(0);
   const [maxScore, setMaxScore] = useState(0);
   const [feedback, setFeedback] = useState<string>('');
+  const [mcqScore, setMcqScore] = useState(0);
+  const [codingScore, setCodingScore] = useState(0);
 
   useEffect(() => {
     loadTest();
@@ -70,7 +73,7 @@ const ChapterTest = () => {
     }
   };
 
-  const handleMCQSubmit = () => {
+  const handleMCQSubmit = async () => {
     let correctCount = 0;
     questions.forEach((q, index) => {
       if (userAnswers[index] === q.correctAnswer) {
@@ -79,11 +82,38 @@ const ChapterTest = () => {
     });
 
     const finalScore = correctCount * 10;
+    const mcqPercentage = Math.round((finalScore / maxScore) * 100);
     setScore(finalScore);
+    setMcqScore(mcqPercentage);
     setTestCompleted(true);
 
     if (currentUser) {
-      updateChapterCompletion(currentUser.uid, course.id, chapter.id, finalScore, maxScore);
+      try {
+        const fullCourse = courses.find(c => c.id === course.id);
+        const totalChapters = fullCourse?.totalChapters || 0;
+
+        console.log('Submitting chapter score...', {
+          courseId: course.id,
+          chapterOrder: chapter.order,
+          mcqScore: mcqPercentage,
+          codingScore: 100,
+          totalChapters
+        });
+
+        await saveChapterScore(
+          currentUser.uid,
+          course.id,
+          chapter.order,
+          mcqPercentage,
+          100,
+          totalChapters
+        );
+
+        console.log('Chapter score submitted successfully!');
+      } catch (error) {
+        console.error('Failed to save chapter score:', error);
+        alert('Warning: Your score may not have been saved. Please check your progress.');
+      }
     }
   };
 
@@ -102,11 +132,37 @@ const ChapterTest = () => {
       );
 
       setScore(result.score);
+      setCodingScore(result.score);
       setFeedback(result.feedback);
       setTestCompleted(true);
 
       if (currentUser) {
-        updateChapterCompletion(currentUser.uid, course.id, chapter.id, result.score, maxScore);
+        try {
+          const fullCourse = courses.find(c => c.id === course.id);
+          const totalChapters = fullCourse?.totalChapters || 0;
+
+          console.log('Submitting chapter score...', {
+            courseId: course.id,
+            chapterOrder: chapter.order,
+            mcqScore: 100,
+            codingScore: result.score,
+            totalChapters
+          });
+
+          await saveChapterScore(
+            currentUser.uid,
+            course.id,
+            chapter.order,
+            100,
+            result.score,
+            totalChapters
+          );
+
+          console.log('Chapter score submitted successfully!');
+        } catch (saveError) {
+          console.error('Failed to save chapter score:', saveError);
+          alert('Warning: Your score may not have been saved. Please check your progress.');
+        }
       }
     } catch (error) {
       console.error('Error evaluating code:', error);
@@ -121,6 +177,8 @@ const ChapterTest = () => {
     setUserAnswers({});
     setUserCode('');
     setScore(0);
+    setMcqScore(0);
+    setCodingScore(0);
     setFeedback('');
     loadTest();
   };

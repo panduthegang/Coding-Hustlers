@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Lock, CheckCircle, PlayCircle, Code, FileText, Trophy, Clock } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, PlayCircle, FileText, Trophy, Clock } from 'lucide-react';
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 import ChapterOverview from '../components/ChapterOverview';
 import { useAuth } from '../contexts/AuthContext';
 import { courses, chapters } from '../lib/courseData';
-import { getCourseProgress, isChapterUnlocked } from '../lib/courseStorage';
-import type { Chapter, CourseProgress } from '../types/course';
+import { getCourseProgress, enrollInCourse, CourseProgress } from '../services/firestore';
+import type { Chapter } from '../types/course';
 
 const CourseDetail = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -21,12 +21,33 @@ const CourseDetail = () => {
   const courseChapters = courseId ? chapters[courseId] || [] : [];
 
   useEffect(() => {
-    if (currentUser && courseId) {
-      const progressList = getCourseProgress(currentUser.uid, courseId);
-      if (progressList.length > 0) {
-        setProgress(progressList[0]);
+    const loadProgress = async () => {
+      if (currentUser && courseId) {
+        try {
+          const courseProgress = await getCourseProgress(currentUser.uid, courseId);
+          if (courseProgress) {
+            setProgress(courseProgress);
+          } else {
+            await enrollInCourse(currentUser.uid, courseId);
+            const newProgress = await getCourseProgress(currentUser.uid, courseId);
+            if (newProgress) {
+              setProgress(newProgress);
+            }
+          }
+        } catch (error) {
+          console.error('Error loading progress:', error);
+        }
       }
-    }
+    };
+
+    loadProgress();
+
+    const handleFocus = () => {
+      loadProgress();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [currentUser, courseId]);
 
   if (!course) {
@@ -45,10 +66,16 @@ const CourseDetail = () => {
     );
   }
 
+  const isChapterUnlocked = (chapterOrder: number): boolean => {
+    if (chapterOrder === 1) return true;
+    if (!progress) return false;
+    return progress.completedChapters.includes(chapterOrder - 1);
+  };
+
   const handleChapterClick = (chapter: Chapter) => {
     if (!currentUser) return;
 
-    const unlocked = isChapterUnlocked(currentUser.uid, course.id, chapter.order);
+    const unlocked = isChapterUnlocked(chapter.order);
     if (!unlocked) return;
 
     setSelectedChapter(chapter);
@@ -64,13 +91,13 @@ const CourseDetail = () => {
     }
   };
 
-  const isCompleted = (chapterId: string): boolean => {
-    return progress?.completedChapters.includes(chapterId) || false;
+  const isCompleted = (chapterOrder: number): boolean => {
+    return progress?.completedChapters.includes(chapterOrder) || false;
   };
 
-  const getChapterScore = (chapterId: string) => {
-    const score = progress?.testScores.find(s => s.chapterId === chapterId);
-    return score;
+  const getChapterScore = (chapterOrder: number) => {
+    if (!progress?.chapterScores) return null;
+    return progress.chapterScores[chapterOrder];
   };
 
   const progressPercentage = progress
@@ -152,9 +179,9 @@ const CourseDetail = () => {
 
           <div className="space-y-4">
             {courseChapters.map((chapter) => {
-              const unlocked = currentUser ? isChapterUnlocked(currentUser.uid, course.id, chapter.order) : false;
-              const completed = isCompleted(chapter.id);
-              const score = getChapterScore(chapter.id);
+              const unlocked = isChapterUnlocked(chapter.order);
+              const completed = isCompleted(chapter.order);
+              const score = getChapterScore(chapter.order);
 
               return (
                 <div
@@ -206,9 +233,9 @@ const CourseDetail = () => {
                           </p>
                           {score && (
                             <div className="flex items-center gap-2 text-sm">
-                              <Trophy className={`w-4 h-4 ${score.passed ? 'text-green-600' : 'text-orange-600'}`} />
+                              <Trophy className={`w-4 h-4 ${score.completed ? 'text-green-600' : 'text-orange-600'}`} />
                               <span className="font-['Poppins'] font-bold text-gray-700">
-                                Score: {score.score}/{score.maxScore} ({Math.round((score.score / score.maxScore) * 100)}%)
+                                MCQ: {score.mcqScore}% | Coding: {score.codingScore}%
                               </span>
                             </div>
                           )}

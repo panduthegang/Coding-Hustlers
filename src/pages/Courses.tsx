@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Clock, Award, ChevronRight, TrendingUp, Search, Filter, X } from 'lucide-react';
+import { BookOpen, Clock, Award, ChevronRight, TrendingUp, Search, Filter, X, Target, CheckCircle2, PlayCircle } from 'lucide-react';
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 import { useAuth } from '../contexts/AuthContext';
 import { courses } from '../lib/courseData';
-import { getCourseProgress, getLatestCourseProgress } from '../lib/courseStorage';
-import type { CourseProgress } from '../types/course';
+import { getAllUserCourseProgress, getUserCourseStats, CourseProgress } from '../services/firestore';
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -16,21 +15,38 @@ const Courses = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [stats, setStats] = useState({ enrolled: 0, inProgress: 0, completed: 0 });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (currentUser) {
-      const allProgress = courses.reduce((acc, course) => {
-        const progress = getCourseProgress(currentUser.uid, course.id);
-        if (progress.length > 0) {
-          acc[course.id] = progress[0];
-        }
-        return acc;
-      }, {} as Record<string, CourseProgress>);
-      setProgressMap(allProgress);
+    const loadCourseData = async () => {
+      if (currentUser) {
+        setLoading(true);
+        try {
+          const [allProgress, courseStats] = await Promise.all([
+            getAllUserCourseProgress(currentUser.uid),
+            getUserCourseStats(currentUser.uid)
+          ]);
 
-      const latest = getLatestCourseProgress(currentUser.uid);
-      setLatestCourse(latest);
-    }
+          setProgressMap(allProgress);
+          setStats(courseStats);
+
+          const progressArray = Object.values(allProgress);
+          if (progressArray.length > 0) {
+            const latest = progressArray.reduce((prev, current) =>
+              new Date(current.lastAccessedAt) > new Date(prev.lastAccessedAt) ? current : prev
+            );
+            setLatestCourse(latest);
+          }
+        } catch (error) {
+          console.error('Error loading course data:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadCourseData();
   }, [currentUser]);
 
   const getProgressPercentage = (courseId: string, totalChapters: number): number => {
@@ -79,6 +95,42 @@ const Courses = () => {
             <p className="text-gray-600 font-['Syne'] text-base lg:text-lg mb-6">
               Master programming skills with structured learning paths
             </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border-2 border-white/40 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                    <Target className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold font-['Poppins'] text-gray-800">{stats.enrolled}</p>
+                    <p className="text-sm text-gray-600 font-['Syne']">Enrolled</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border-2 border-white/40 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                    <PlayCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold font-['Poppins'] text-gray-800">{stats.inProgress}</p>
+                    <p className="text-sm text-gray-600 font-['Syne']">In Progress</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border-2 border-white/40 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                    <CheckCircle2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold font-['Poppins'] text-gray-800">{stats.completed}</p>
+                    <p className="text-sm text-gray-600 font-['Syne']">Completed</p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="relative flex-1">
@@ -178,7 +230,12 @@ const Courses = () => {
             </div>
           )}
 
-          {filteredCourses.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-16">
+              <div className="inline-block w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+              <p className="mt-4 text-gray-600 font-['Syne']">Loading courses...</p>
+            </div>
+          ) : filteredCourses.length === 0 ? (
             <div className="text-center py-16">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-2xl font-bold font-['Syne'] text-gray-800 mb-2">No courses found</h3>
