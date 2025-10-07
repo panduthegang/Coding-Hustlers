@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Bell, Globe, Lock, Monitor } from 'lucide-react';
+import { Bell, Lock } from 'lucide-react';
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserSettings, updateUserSettings, createUserProfile } from '../services/firestore';
@@ -246,51 +246,6 @@ const Settings = () => {
               </div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <Monitor className="w-6 h-6 text-purple-600" />
-                <h2 className="text-2xl font-bold font-['Syne']">Appearance</h2>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-medium font-['Syne'] mb-2">Theme</h3>
-                  <select
-                    value={formData.theme}
-                    onChange={(e) => handleSelectChange('theme', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none font-['Syne']"
-                  >
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                    <option value="auto">Auto</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <Globe className="w-6 h-6 text-purple-600" />
-                <h2 className="text-2xl font-bold font-['Syne']">Language & Region</h2>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-medium font-['Syne'] mb-2">Language</h3>
-                  <select
-                    value={formData.language}
-                    onChange={(e) => handleSelectChange('language', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none font-['Syne']"
-                  >
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="hi">Hindi</option>
-                  </select>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

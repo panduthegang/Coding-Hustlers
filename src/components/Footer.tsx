@@ -14,12 +14,12 @@ const Footer = () => {
             </h3>
             <div className="space-y-2 text-gray-800 font-['Syne']">
               <p className="font-bold text-sm">Address:</p>
-              <p className="text-sm">Kholi no 420 Mumbra</p>
+              <p className="text-sm">Silicon Valley, India</p>
             </div>
             <div className="space-y-2 text-gray-800 font-['Syne']">
               <p className="font-bold text-sm">Contact:</p>
-              <p className="text-sm">8451811626</p>
-              <p className="text-sm">panduthegang@gmail.com</p>
+              <p className="text-sm">+91 98765 43210</p>
+              <p className="text-sm">harshsrathod959@gmail.com</p>
             </div>
             <div className="flex gap-4">
               <a href="#" className="text-[#B33DEB] hover:text-[#DE8FFF] transition-colors">

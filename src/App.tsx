@@ -12,6 +12,7 @@ import Settings from './pages/Settings';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import ChapterTest from './pages/ChapterTest';
+import About from './pages/About';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -94,6 +95,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

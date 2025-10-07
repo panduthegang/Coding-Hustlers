@@ -23,6 +23,9 @@ const Header = () => {
             <a href="#explore" className="text-gray-700 hover:text-purple-600 transition-colors font-['Syne'] text-lg">
               Explore
             </a>
+            <button onClick={() => navigate('/about')} className="text-gray-700 hover:text-purple-600 transition-colors font-['Syne'] text-lg">
+              About
+            </button>
             <button onClick={() => navigate('/login')} className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-['Syne'] text-lg hover:opacity-80">
               Login
             </button>
@@ -76,6 +79,12 @@ const Header = () => {
             >
               Explore
             </a>
+            <button
+              onClick={() => { navigate('/about'); setIsMobileMenuOpen(false); }}
+              className="text-gray-700 hover:text-purple-600 transition-colors font-['Syne'] text-lg text-left"
+            >
+              About
+            </button>
             <button
               onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
               className="bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] bg-clip-text text-transparent font-['Syne'] text-lg text-left"
