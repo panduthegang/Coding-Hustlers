@@ -3,7 +3,7 @@ import { FileText, ChevronDown, ChevronLeft, ChevronRight, CreditCard as Edit, C
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { type Test } from '../lib/localStorage';
-import { getUserTests, getTestStats } from '../services/firestore';
+import { getTestStats, subscribeToUserTests } from '../services/firestore';
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 
 const Dashboard = () => {
@@ -26,35 +26,44 @@ const Dashboard = () => {
   const userName = currentUser?.displayName || 'User';
 
   useEffect(() => {
-    if (currentUser) {
-      fetchUserTests();
-      fetchStats();
-    }
-  }, [currentUser]);
+    if (!currentUser) return;
 
-  const fetchUserTests = async () => {
-    try {
-      const statsData = await getTestStats(currentUser?.uid!);
-      setTests(statsData.tests);
-    } catch (error) {
-      console.error('Error fetching tests:', error);
-    }
-  };
+    const unsubscribe = subscribeToUserTests(currentUser.uid, (tests) => {
+      const uniqueTests = tests.reduce((acc: Test[], current) => {
+        const existing = acc.find(t => t.title === current.title);
+        if (!existing) {
+          acc.push(current);
+        } else {
+          const existingIndex = acc.indexOf(existing);
+          if (new Date(current.created_at).getTime() > new Date(existing.created_at).getTime()) {
+            acc[existingIndex] = current;
+          }
+        }
+        return acc;
+      }, []);
 
-  const fetchStats = async () => {
-    try {
-      const statsData = await getTestStats(currentUser?.uid!);
+      setTests(uniqueTests);
+
+      const completed = uniqueTests.filter((t: Test) => t.status === 'completed');
+      const passed = completed.filter((t: Test) => t.score >= t.max_score * 0.6);
+      const failed = completed.filter((t: Test) => t.score < t.max_score * 0.6);
+      const pending = uniqueTests.filter((t: Test) => t.status === 'pending_result');
+
+      const avgScore = completed.length > 0
+        ? Math.round(completed.reduce((sum: number, t: Test) => sum + (t.score / t.max_score) * 100, 0) / completed.length)
+        : 0;
+
       setStats({
-        totalTests: statsData.totalTests,
-        passed: statsData.passed,
-        failed: statsData.failed,
-        pending: statsData.pending,
-        avgScore: statsData.avgScore
+        totalTests: uniqueTests.length,
+        passed: passed.length,
+        failed: failed.length,
+        pending: pending.length,
+        avgScore,
       });
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
+    });
+
+    return () => unsubscribe();
+  }, [currentUser]);
 
   const paginatedTests = tests.slice(currentPage * testsPerPage, (currentPage + 1) * testsPerPage);
   const maxPages = Math.ceil(tests.length / testsPerPage);

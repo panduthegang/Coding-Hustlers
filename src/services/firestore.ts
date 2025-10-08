@@ -12,6 +12,7 @@ import {
   orderBy,
   getDocs,
   limit,
+  onSnapshot,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { UserProfile, UserSettings } from '../types/profile';
@@ -400,4 +401,76 @@ export const getAllUserCourseProgress = async (userId: string): Promise<Record<s
   });
 
   return progressMap;
+};
+
+export const subscribeToUserTests = (
+  userId: string,
+  callback: (tests: Test[]) => void
+) => {
+  const testsRef = collection(db, 'tests');
+  const q = query(
+    testsRef,
+    where('user_id', '==', userId),
+    orderBy('created_at', 'desc')
+  );
+
+  return onSnapshot(q, (querySnapshot) => {
+    const tests: Test[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      tests.push({
+        ...data,
+        id: doc.id,
+        created_at: data.created_at?.toDate?.()?.toISOString() || new Date().toISOString(),
+        completed_at: data.completed_at?.toDate?.()?.toISOString() || data.completed_at,
+      } as Test);
+    });
+    callback(tests);
+  });
+};
+
+export const subscribeToCourseProgress = (
+  userId: string,
+  courseId: string,
+  callback: (progress: CourseProgress | null) => void
+) => {
+  const progressRef = doc(db, 'courseProgress', `${userId}_${courseId}`);
+
+  return onSnapshot(progressRef, (doc) => {
+    if (doc.exists()) {
+      const data = doc.data();
+      callback({
+        ...data,
+        enrolledAt: convertTimestamp(data.enrolledAt),
+        lastAccessedAt: convertTimestamp(data.lastAccessedAt),
+        completedAt: data.completedAt ? convertTimestamp(data.completedAt) : undefined,
+      } as CourseProgress);
+    } else {
+      callback(null);
+    }
+  });
+};
+
+export const subscribeToAllUserCourseProgress = (
+  userId: string,
+  callback: (progressMap: Record<string, CourseProgress>) => void
+) => {
+  const progressRef = collection(db, 'courseProgress');
+  const q = query(progressRef, where('userId', '==', userId));
+
+  return onSnapshot(q, (querySnapshot) => {
+    const progressMap: Record<string, CourseProgress> = {};
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      progressMap[data.courseId] = {
+        ...data,
+        enrolledAt: convertTimestamp(data.enrolledAt),
+        lastAccessedAt: convertTimestamp(data.lastAccessedAt),
+        completedAt: data.completedAt ? convertTimestamp(data.completedAt) : undefined,
+      } as CourseProgress;
+    });
+
+    callback(progressMap);
+  });
 };

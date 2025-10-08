@@ -5,7 +5,7 @@ import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 import ChapterOverview from '../components/ChapterOverview';
 import { useAuth } from '../contexts/AuthContext';
 import { courses, chapters } from '../lib/courseData';
-import { getCourseProgress, enrollInCourse, CourseProgress } from '../services/firestore';
+import { getCourseProgress, enrollInCourse, subscribeToCourseProgress, CourseProgress } from '../services/firestore';
 import type { Chapter } from '../types/course';
 
 const CourseDetail = () => {
@@ -21,33 +21,30 @@ const CourseDetail = () => {
   const courseChapters = courseId ? chapters[courseId] || [] : [];
 
   useEffect(() => {
-    const loadProgress = async () => {
-      if (currentUser && courseId) {
-        try {
-          const courseProgress = await getCourseProgress(currentUser.uid, courseId);
-          if (courseProgress) {
-            setProgress(courseProgress);
-          } else {
-            await enrollInCourse(currentUser.uid, courseId);
-            const newProgress = await getCourseProgress(currentUser.uid, courseId);
-            if (newProgress) {
-              setProgress(newProgress);
-            }
-          }
-        } catch (error) {
-          console.error('Error loading progress:', error);
+    if (!currentUser || !courseId) return;
+
+    const initializeProgress = async () => {
+      try {
+        const courseProgress = await getCourseProgress(currentUser.uid, courseId);
+        if (!courseProgress) {
+          await enrollInCourse(currentUser.uid, courseId);
         }
+      } catch (error) {
+        console.error('Error initializing progress:', error);
       }
     };
 
-    loadProgress();
+    initializeProgress();
 
-    const handleFocus = () => {
-      loadProgress();
-    };
+    const unsubscribe = subscribeToCourseProgress(
+      currentUser.uid,
+      courseId,
+      (courseProgress) => {
+        setProgress(courseProgress);
+      }
+    );
 
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
+    return () => unsubscribe();
   }, [currentUser, courseId]);
 
   if (!course) {

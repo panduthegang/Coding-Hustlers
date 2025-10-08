@@ -4,7 +4,7 @@ import { BookOpen, Clock, Award, ChevronRight, TrendingUp, Search, Filter, X, Ta
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 import { useAuth } from '../contexts/AuthContext';
 import { courses } from '../lib/courseData';
-import { getAllUserCourseProgress, getUserCourseStats, CourseProgress } from '../services/firestore';
+import { subscribeToAllUserCourseProgress, CourseProgress } from '../services/firestore';
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -21,34 +21,45 @@ const Courses = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadCourseData = async () => {
-      if (currentUser) {
-        setLoading(true);
-        try {
-          const [allProgress, courseStats] = await Promise.all([
-            getAllUserCourseProgress(currentUser.uid),
-            getUserCourseStats(currentUser.uid)
-          ]);
+    if (!currentUser) return;
 
-          setProgressMap(allProgress);
-          setStats(courseStats);
+    setLoading(true);
 
-          const progressArray = Object.values(allProgress);
-          if (progressArray.length > 0) {
-            const latest = progressArray.reduce((prev, current) =>
-              new Date(current.lastAccessedAt) > new Date(prev.lastAccessedAt) ? current : prev
-            );
-            setLatestCourse(latest);
+    const unsubscribe = subscribeToAllUserCourseProgress(
+      currentUser.uid,
+      (allProgress) => {
+        setProgressMap(allProgress);
+
+        let enrolled = 0;
+        let inProgress = 0;
+        let completed = 0;
+
+        Object.values(allProgress).forEach((progress) => {
+          enrolled++;
+          if (progress.status === 'completed') {
+            completed++;
+          } else if (progress.status === 'in_progress') {
+            inProgress++;
           }
-        } catch (error) {
-          console.error('Error loading course data:', error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
+        });
 
-    loadCourseData();
+        setStats({ enrolled, inProgress, completed });
+
+        const progressArray = Object.values(allProgress);
+        if (progressArray.length > 0) {
+          const latest = progressArray.reduce((prev, current) =>
+            new Date(current.lastAccessedAt) > new Date(prev.lastAccessedAt) ? current : prev
+          );
+          setLatestCourse(latest);
+        } else {
+          setLatestCourse(null);
+        }
+
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
   }, [currentUser]);
 
   const getProgressPercentage = (courseId: string, totalChapters: number): number => {
