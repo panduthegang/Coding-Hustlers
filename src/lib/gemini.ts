@@ -260,3 +260,203 @@ export async function evaluateCodingChallenge(challengeTitle: string, challengeD
 
   throw new Error('Failed to evaluate code');
 }
+
+export async function generateDebugProblem(topic: string, difficulty: string) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+  const prompt = `Generate a debug challenge about ${topic} at ${difficulty} difficulty level.
+
+  IMPORTANT: Do NOT use any asterisks, markdown formatting, or special characters. Use plain text only.
+
+  Return the response as a JSON object with the following structure:
+  {
+    "title": "Debug Challenge Title (no asterisks)",
+    "description": "Brief description of what the code is supposed to do (plain text)",
+    "buggyCode": "Code with intentional bugs that needs to be fixed",
+    "language": "javascript",
+    "hints": ["Hint 1 about where bugs might be", "Hint 2 about what to look for"],
+    "expectedBehavior": "Description of correct behavior",
+    "testCases": [
+      {
+        "input": "Test input",
+        "expectedOutput": "Expected output"
+      }
+    ]
+  }
+
+  Make the bugs realistic and educational. Include 2-3 bugs that test understanding of ${topic}.
+  Remember: Use only plain text without asterisks or markdown formatting.`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    const parsed = JSON.parse(jsonMatch[0]);
+    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+
+    return {
+      ...parsed,
+      title: cleanText(parsed.title),
+      description: cleanText(parsed.description),
+      expectedBehavior: cleanText(parsed.expectedBehavior),
+      hints: parsed.hints.map((h: string) => cleanText(h))
+    };
+  }
+
+  throw new Error('Failed to generate debug problem');
+}
+
+export async function evaluateDebugCode(originalBuggyCode: string, fixedCode: string, description: string, testCases: any[]) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+  const prompt = `Evaluate the debugging solution:
+
+  Original Buggy Code:
+  ${originalBuggyCode}
+
+  Fixed Code:
+  ${fixedCode}
+
+  Problem Description: ${description}
+  Test Cases: ${JSON.stringify(testCases)}
+
+  IMPORTANT: Do NOT use asterisks or markdown formatting in your feedback. Use plain text only.
+
+  Return a JSON object with:
+  {
+    "passed": true/false,
+    "score": number (0-100),
+    "feedback": "Detailed feedback on whether bugs were fixed correctly (plain text, no asterisks)",
+    "bugsFound": number,
+    "testResults": [
+      {
+        "passed": true/false,
+        "expected": "expected output",
+        "actual": "actual output"
+      }
+    ]
+  }`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    const parsed = JSON.parse(jsonMatch[0]);
+    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+
+    return {
+      ...parsed,
+      feedback: cleanText(parsed.feedback)
+    };
+  }
+
+  throw new Error('Failed to evaluate debug code');
+}
+
+export async function generatePseudocodeProblem(topic: string, difficulty: string) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+  const prompt = `Generate a pseudocode problem about ${topic} at ${difficulty} difficulty level.
+
+  IMPORTANT: Do NOT use any asterisks, markdown formatting, or special characters. Use plain text only.
+
+  Return the response as a JSON object with the following structure:
+  {
+    "title": "Problem Title (no asterisks)",
+    "description": "Detailed problem description (plain text)",
+    "requirements": [
+      "Requirement 1: Must handle this case",
+      "Requirement 2: Must consider this scenario"
+    ],
+    "examples": [
+      {
+        "scenario": "Example scenario description",
+        "expectedApproach": "Brief description of expected approach"
+      }
+    ],
+    "evaluationCriteria": [
+      "Criterion 1: Logic correctness",
+      "Criterion 2: Edge case handling",
+      "Criterion 3: Clarity of expression"
+    ]
+  }
+
+  The problem should test algorithmic thinking without requiring actual code.
+  Remember: Use only plain text without asterisks or markdown formatting.`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    const parsed = JSON.parse(jsonMatch[0]);
+    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+
+    return {
+      ...parsed,
+      title: cleanText(parsed.title),
+      description: cleanText(parsed.description),
+      requirements: parsed.requirements.map((r: string) => cleanText(r)),
+      evaluationCriteria: parsed.evaluationCriteria.map((c: string) => cleanText(c))
+    };
+  }
+
+  throw new Error('Failed to generate pseudocode problem');
+}
+
+export async function evaluatePseudocode(problem: string, requirements: string[], pseudocode: string) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+  const prompt = `Evaluate the following pseudocode solution:
+
+  Problem: ${problem}
+  Requirements: ${JSON.stringify(requirements)}
+
+  User's Pseudocode:
+  ${pseudocode}
+
+  IMPORTANT: Do NOT use asterisks or markdown formatting in your feedback. Use plain text only.
+
+  Return a JSON object with:
+  {
+    "score": number (0-100),
+    "feedback": "Detailed feedback on logic, clarity, completeness, and edge case handling (plain text, no asterisks)",
+    "strengths": ["Strength 1", "Strength 2"],
+    "improvements": ["Area for improvement 1", "Area for improvement 2"],
+    "logicCorrect": true/false,
+    "edgeCasesHandled": true/false,
+    "clarityScore": number (0-10)
+  }
+
+  Evaluate based on:
+  1. Logical correctness of the algorithm
+  2. Handling of edge cases
+  3. Clarity and readability of the pseudocode
+  4. Completeness in addressing all requirements
+
+  Remember: Use only plain text without asterisks or markdown formatting.`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    const parsed = JSON.parse(jsonMatch[0]);
+    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+
+    return {
+      ...parsed,
+      feedback: cleanText(parsed.feedback),
+      strengths: parsed.strengths.map((s: string) => cleanText(s)),
+      improvements: parsed.improvements.map((i: string) => cleanText(i))
+    };
+  }
+
+  throw new Error('Failed to evaluate pseudocode');
+}

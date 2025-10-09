@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, ChevronDown, ChevronLeft, ChevronRight, CreditCard as Edit, Calendar, CheckCircle2, XCircle, Clock, Code, Check, X, User, Mail, LogOut } from 'lucide-react';
+import { FileText, ChevronDown, ChevronLeft, ChevronRight, CreditCard as Edit, Calendar, CheckCircle2, XCircle, Clock, Code, Check, X, User, Mail, LogOut, Bug, FileCode } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { type Test } from '../lib/localStorage';
@@ -271,10 +271,18 @@ const Dashboard = () => {
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-md ${
                                   test.type === 'mcq'
                                     ? 'bg-gradient-to-br from-blue-500 to-cyan-500'
+                                    : test.type === 'debug'
+                                    ? 'bg-gradient-to-br from-orange-500 to-red-500'
+                                    : test.type === 'pseudocode'
+                                    ? 'bg-gradient-to-br from-teal-500 to-green-500'
                                     : 'bg-gradient-to-br from-purple-500 to-pink-500'
                                 }`}>
                                   {test.type === 'mcq' ? (
                                     <Edit className="w-6 h-6 text-white" />
+                                  ) : test.type === 'debug' ? (
+                                    <Bug className="w-6 h-6 text-white" />
+                                  ) : test.type === 'pseudocode' ? (
+                                    <FileCode className="w-6 h-6 text-white" />
                                   ) : (
                                     <Code className="w-6 h-6 text-white" />
                                   )}
@@ -283,9 +291,13 @@ const Dashboard = () => {
                                   <div className={`px-3 py-1 rounded-lg text-xs font-bold font-['Poppins'] tracking-wider ${
                                     test.type === 'mcq'
                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
+                                      : test.type === 'debug'
+                                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
+                                      : test.type === 'pseudocode'
+                                      ? 'bg-gradient-to-r from-teal-500 to-green-500 text-white'
                                       : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
                                   }`}>
-                                    {test.type === 'mcq' ? 'MCQ TEST' : 'CODING'}
+                                    {test.type === 'mcq' ? 'MCQ TEST' : test.type === 'debug' ? 'DEBUG' : test.type === 'pseudocode' ? 'PSEUDOCODE' : 'CODING'}
                                   </div>
                                 </div>
                               </div>

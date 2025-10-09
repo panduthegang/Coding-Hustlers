@@ -1,15 +1,42 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Code, List } from 'lucide-react';
+import { Code, List, Bug, FileText, ChevronDown } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Sidebar, { MobileSidebarToggle } from '../components/Sidebar';
 
 const Tests = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const [selectedType, setSelectedType] = useState<'mcq' | 'coding' | null>(null);
+  const [selectedType, setSelectedType] = useState<'mcq' | 'coding' | 'debug' | 'pseudocode' | null>(null);
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
+  const [showTopicDropdown, setShowTopicDropdown] = useState(false);
+
+  const topicOptions = {
+    beginner: [
+      'HTML & CSS Basics',
+      'JavaScript Fundamentals',
+      'Python Basics',
+      'Git & Version Control',
+      'SQL Fundamentals'
+    ],
+    intermediate: [
+      'React.js',
+      'Node.js & Express',
+      'RESTful APIs',
+      'Data Structures',
+      'Algorithms',
+      'Object-Oriented Programming'
+    ],
+    advanced: [
+      'System Design',
+      'Microservices Architecture',
+      'Advanced Algorithms',
+      'Machine Learning',
+      'Cloud Computing (AWS/Azure)',
+      'DevOps & CI/CD'
+    ]
+  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
 
@@ -19,7 +46,11 @@ const Tests = () => {
       return;
     }
 
-    const testUrl = selectedType === 'mcq' ? `/test/mcq` : `/test/coding`;
+    let testUrl = '';
+    if (selectedType === 'mcq') testUrl = '/test/mcq';
+    else if (selectedType === 'coding') testUrl = '/test/coding';
+    else if (selectedType === 'debug') testUrl = '/test/debug';
+    else if (selectedType === 'pseudocode') testUrl = '/test/pseudocode';
     navigate(testUrl, { state: { topic, difficulty } });
   };
 
@@ -78,21 +109,120 @@ const Tests = () => {
                       Solve coding problems and test your programming skills
                     </p>
                   </button>
+
+                  <button
+                    onClick={() => setSelectedType('debug')}
+                    className={`p-6 lg:p-8 rounded-xl border-2 transition-all ${
+                      selectedType === 'debug'
+                        ? 'border-purple-500 bg-purple-50'
+                        : 'border-gray-300 bg-white hover:border-purple-300'
+                    }`}
+                  >
+                    <Bug className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 text-purple-600" />
+                    <h4 className="text-lg lg:text-xl font-bold font-['Syne'] text-black mb-2">Debug Challenge</h4>
+                    <p className="text-xs lg:text-sm text-gray-600 font-['Syne']">
+                      Find and fix bugs in existing code
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => setSelectedType('pseudocode')}
+                    className={`p-6 lg:p-8 rounded-xl border-2 transition-all ${
+                      selectedType === 'pseudocode'
+                        ? 'border-purple-500 bg-purple-50'
+                        : 'border-gray-300 bg-white hover:border-purple-300'
+                    }`}
+                  >
+                    <FileText className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 text-purple-600" />
+                    <h4 className="text-lg lg:text-xl font-bold font-['Syne'] text-black mb-2">Pseudocode Test</h4>
+                    <p className="text-xs lg:text-sm text-gray-600 font-['Syne']">
+                      Write algorithmic solutions in plain English with logic
+                    </p>
+                  </button>
                 </div>
 
                 {selectedType && (
                   <div className="space-y-4 lg:space-y-6">
-                    <div>
+                    <div className="relative">
                       <label className="block text-sm font-medium text-gray-700 font-['Syne'] mb-2">
                         Topic
                       </label>
-                      <input
-                        type="text"
-                        value={topic}
-                        onChange={(e) => setTopic(e.target.value)}
-                        placeholder="e.g., JavaScript, Python, Data Structures"
-                        className="w-full px-4 lg:px-6 py-3 lg:py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700 text-sm lg:text-base"
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={topic}
+                          onChange={(e) => setTopic(e.target.value)}
+                          onFocus={() => setShowTopicDropdown(true)}
+                          placeholder="e.g., JavaScript, Python, Data Structures"
+                          className="w-full px-4 lg:px-6 py-3 lg:py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors font-['Syne'] text-gray-700 text-sm lg:text-base pr-10"
+                        />
+                        <button
+                          onClick={() => setShowTopicDropdown(!showTopicDropdown)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
+                        >
+                          <ChevronDown className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      {showTopicDropdown && (
+                        <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-xl max-h-96 overflow-y-auto">
+                          <div className="p-2">
+                            <div className="mb-4">
+                              <div className="px-4 py-2 bg-gradient-to-r from-green-50 to-green-100 rounded-lg mb-2">
+                                <h4 className="font-bold font-['Syne'] text-green-700 text-sm">Beginner</h4>
+                              </div>
+                              {topicOptions.beginner.map((opt) => (
+                                <button
+                                  key={opt}
+                                  onClick={() => {
+                                    setTopic(opt);
+                                    setShowTopicDropdown(false);
+                                  }}
+                                  className="w-full text-left px-4 py-2 hover:bg-purple-50 rounded-lg transition-colors font-['Syne'] text-sm text-gray-700"
+                                >
+                                  {opt}
+                                </button>
+                              ))}
+                            </div>
+
+                            <div className="mb-4">
+                              <div className="px-4 py-2 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg mb-2">
+                                <h4 className="font-bold font-['Syne'] text-blue-700 text-sm">Intermediate</h4>
+                              </div>
+                              {topicOptions.intermediate.map((opt) => (
+                                <button
+                                  key={opt}
+                                  onClick={() => {
+                                    setTopic(opt);
+                                    setShowTopicDropdown(false);
+                                  }}
+                                  className="w-full text-left px-4 py-2 hover:bg-purple-50 rounded-lg transition-colors font-['Syne'] text-sm text-gray-700"
+                                >
+                                  {opt}
+                                </button>
+                              ))}
+                            </div>
+
+                            <div>
+                              <div className="px-4 py-2 bg-gradient-to-r from-red-50 to-red-100 rounded-lg mb-2">
+                                <h4 className="font-bold font-['Syne'] text-red-700 text-sm">Advanced</h4>
+                              </div>
+                              {topicOptions.advanced.map((opt) => (
+                                <button
+                                  key={opt}
+                                  onClick={() => {
+                                    setTopic(opt);
+                                    setShowTopicDropdown(false);
+                                  }}
+                                  className="w-full text-left px-4 py-2 hover:bg-purple-50 rounded-lg transition-colors font-['Syne'] text-sm text-gray-700"
+                                >
+                                  {opt}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div>

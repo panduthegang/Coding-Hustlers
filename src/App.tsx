@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import Tests from './pages/Tests';
 import MCQTest from './pages/MCQTest';
 import CodingTest from './pages/CodingTest';
+import DebugTest from './pages/DebugTest';
+import PseudocodeTest from './pages/PseudocodeTest';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Courses from './pages/Courses';
@@ -52,6 +54,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <CodingTest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/test/debug"
+            element={
+              <ProtectedRoute>
+                <DebugTest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/test/pseudocode"
+            element={
+              <ProtectedRoute>
+                <PseudocodeTest />
               </ProtectedRoute>
             }
           />
