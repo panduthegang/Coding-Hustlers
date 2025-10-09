@@ -180,6 +180,146 @@ export const courses: Course[] = [
     difficulty: 'Advanced',
     totalChapters: 14,
     estimatedHours: 75
+  },
+  {
+    id: 'docker',
+    title: 'Docker & Containers',
+    description: 'Master containerization with Docker, images, and container orchestration',
+    icon: '🐳',
+    color: 'from-blue-400 to-cyan-600',
+    difficulty: 'Intermediate',
+    totalChapters: 8,
+    estimatedHours: 40
+  },
+  {
+    id: 'aws',
+    title: 'AWS Cloud',
+    description: 'Amazon Web Services cloud computing, EC2, S3, Lambda, and more',
+    icon: '☁️',
+    color: 'from-orange-400 to-amber-600',
+    difficulty: 'Intermediate',
+    totalChapters: 10,
+    estimatedHours: 55
+  },
+  {
+    id: 'mongodb',
+    title: 'MongoDB',
+    description: 'NoSQL database design, queries, aggregation, and performance tuning',
+    icon: '🍃',
+    color: 'from-green-600 to-emerald-700',
+    difficulty: 'Intermediate',
+    totalChapters: 9,
+    estimatedHours: 45
+  },
+  {
+    id: 'angular',
+    title: 'Angular',
+    description: 'Build enterprise web applications with Angular framework',
+    icon: '🅰️',
+    color: 'from-red-500 to-red-700',
+    difficulty: 'Intermediate',
+    totalChapters: 10,
+    estimatedHours: 50
+  },
+  {
+    id: 'vue',
+    title: 'Vue.js',
+    description: 'Progressive JavaScript framework for building user interfaces',
+    icon: '💚',
+    color: 'from-green-400 to-teal-600',
+    difficulty: 'Intermediate',
+    totalChapters: 9,
+    estimatedHours: 45
+  },
+  {
+    id: 'django',
+    title: 'Django',
+    description: 'Python web framework for rapid development and clean design',
+    icon: '🎸',
+    color: 'from-green-700 to-teal-800',
+    difficulty: 'Intermediate',
+    totalChapters: 11,
+    estimatedHours: 55
+  },
+  {
+    id: 'spring',
+    title: 'Spring Boot',
+    description: 'Java framework for building enterprise applications and microservices',
+    icon: '🍀',
+    color: 'from-green-500 to-lime-600',
+    difficulty: 'Advanced',
+    totalChapters: 12,
+    estimatedHours: 65
+  },
+  {
+    id: 'graphql',
+    title: 'GraphQL',
+    description: 'Query language for APIs and runtime for fulfilling queries',
+    icon: '◈',
+    color: 'from-pink-400 to-fuchsia-600',
+    difficulty: 'Intermediate',
+    totalChapters: 8,
+    estimatedHours: 40
+  },
+  {
+    id: 'redis',
+    title: 'Redis',
+    description: 'In-memory data structure store for caching and real-time applications',
+    icon: '🔴',
+    color: 'from-red-600 to-rose-700',
+    difficulty: 'Intermediate',
+    totalChapters: 7,
+    estimatedHours: 35
+  },
+  {
+    id: 'firebase',
+    title: 'Firebase',
+    description: 'Google platform for mobile and web app development with backend services',
+    icon: '🔥',
+    color: 'from-yellow-400 to-orange-600',
+    difficulty: 'Beginner',
+    totalChapters: 9,
+    estimatedHours: 45
+  },
+  {
+    id: 'swift',
+    title: 'Swift',
+    description: 'Apple programming language for iOS, macOS, and app development',
+    icon: '🦅',
+    color: 'from-orange-500 to-red-600',
+    difficulty: 'Intermediate',
+    totalChapters: 10,
+    estimatedHours: 50
+  },
+  {
+    id: 'php',
+    title: 'PHP',
+    description: 'Server-side scripting language for web development',
+    icon: '🐘',
+    color: 'from-indigo-400 to-blue-600',
+    difficulty: 'Beginner',
+    totalChapters: 10,
+    estimatedHours: 50
+  },
+  {
+    id: 'ruby',
+    title: 'Ruby & Rails',
+    description: 'Ruby language and Rails framework for web applications',
+    icon: '💎',
+    color: 'from-red-600 to-rose-800',
+    difficulty: 'Intermediate',
+    totalChapters: 11,
+    estimatedHours: 55
+  },
+  {
+    id: 'linux',
+    title: 'Linux System Administration',
+    description: 'Master Linux command line, system management, and server administration',
+    icon: '🐧',
+    color: 'from-slate-600 to-gray-800',
+    difficulty: 'Intermediate',
+    totalChapters: 10,
+    estimatedHours: 50
   }
 ];
 
@@ -2066,6 +2206,1374 @@ export const chapters: Record<string, Chapter[]> = {
       description: 'GANs, transformers, and cutting-edge ML',
       order: 14,
       content: 'Master advanced ML.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  docker: [
+    {
+      id: 'docker-1',
+      courseId: 'docker',
+      title: 'Docker Basics',
+      description: 'Containers, images, and Docker fundamentals',
+      order: 1,
+      content: 'Learn Docker fundamentals and containerization.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'docker-2',
+      courseId: 'docker',
+      title: 'Docker Images',
+      description: 'Building and managing Docker images',
+      order: 2,
+      content: 'Create and manage Docker images.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'docker-3',
+      courseId: 'docker',
+      title: 'Dockerfile',
+      description: 'Writing Dockerfiles and best practices',
+      order: 3,
+      content: 'Master Dockerfile creation.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'docker-4',
+      courseId: 'docker',
+      title: 'Docker Compose',
+      description: 'Multi-container applications with Docker Compose',
+      order: 4,
+      content: 'Orchestrate multiple containers.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'docker-5',
+      courseId: 'docker',
+      title: 'Networking',
+      description: 'Docker networking and communication',
+      order: 5,
+      content: 'Connect containers effectively.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'docker-6',
+      courseId: 'docker',
+      title: 'Volumes',
+      description: 'Data persistence with Docker volumes',
+      order: 6,
+      content: 'Manage persistent data.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'docker-7',
+      courseId: 'docker',
+      title: 'Docker Registry',
+      description: 'Docker Hub and private registries',
+      order: 7,
+      content: 'Work with image registries.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'docker-8',
+      courseId: 'docker',
+      title: 'Production Deployment',
+      description: 'Docker in production and optimization',
+      order: 8,
+      content: 'Deploy containers to production.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  aws: [
+    {
+      id: 'aws-1',
+      courseId: 'aws',
+      title: 'AWS Fundamentals',
+      description: 'Cloud computing basics and AWS overview',
+      order: 1,
+      content: 'Get started with AWS.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'aws-2',
+      courseId: 'aws',
+      title: 'EC2',
+      description: 'Elastic Compute Cloud and virtual servers',
+      order: 2,
+      content: 'Launch and manage EC2 instances.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'aws-3',
+      courseId: 'aws',
+      title: 'S3',
+      description: 'Simple Storage Service and object storage',
+      order: 3,
+      content: 'Store data in S3 buckets.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'aws-4',
+      courseId: 'aws',
+      title: 'IAM',
+      description: 'Identity and Access Management',
+      order: 4,
+      content: 'Manage users and permissions.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'aws-5',
+      courseId: 'aws',
+      title: 'Lambda',
+      description: 'Serverless computing with Lambda',
+      order: 5,
+      content: 'Build serverless applications.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'aws-6',
+      courseId: 'aws',
+      title: 'RDS',
+      description: 'Relational Database Service',
+      order: 6,
+      content: 'Manage databases in the cloud.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'aws-7',
+      courseId: 'aws',
+      title: 'VPC',
+      description: 'Virtual Private Cloud and networking',
+      order: 7,
+      content: 'Configure cloud networks.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'aws-8',
+      courseId: 'aws',
+      title: 'CloudFormation',
+      description: 'Infrastructure as Code with CloudFormation',
+      order: 8,
+      content: 'Automate infrastructure provisioning.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'aws-9',
+      courseId: 'aws',
+      title: 'CloudWatch',
+      description: 'Monitoring and logging',
+      order: 9,
+      content: 'Monitor AWS resources.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'aws-10',
+      courseId: 'aws',
+      title: 'Advanced AWS',
+      description: 'ECS, EKS, and advanced services',
+      order: 10,
+      content: 'Master advanced AWS services.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  mongodb: [
+    {
+      id: 'mongo-1',
+      courseId: 'mongodb',
+      title: 'MongoDB Basics',
+      description: 'NoSQL concepts and MongoDB introduction',
+      order: 1,
+      content: 'Learn MongoDB fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'mongo-2',
+      courseId: 'mongodb',
+      title: 'CRUD Operations',
+      description: 'Create, read, update, delete operations',
+      order: 2,
+      content: 'Perform basic database operations.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'mongo-3',
+      courseId: 'mongodb',
+      title: 'Data Modeling',
+      description: 'Schema design and document structure',
+      order: 3,
+      content: 'Design MongoDB schemas.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'mongo-4',
+      courseId: 'mongodb',
+      title: 'Queries',
+      description: 'Advanced queries and filtering',
+      order: 4,
+      content: 'Write complex queries.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'mongo-5',
+      courseId: 'mongodb',
+      title: 'Aggregation',
+      description: 'Aggregation pipeline and data processing',
+      order: 5,
+      content: 'Process data with aggregation.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'mongo-6',
+      courseId: 'mongodb',
+      title: 'Indexes',
+      description: 'Indexing for performance optimization',
+      order: 6,
+      content: 'Optimize query performance.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'mongo-7',
+      courseId: 'mongodb',
+      title: 'Replication',
+      description: 'Replica sets and high availability',
+      order: 7,
+      content: 'Setup replica sets.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'mongo-8',
+      courseId: 'mongodb',
+      title: 'Sharding',
+      description: 'Horizontal scaling with sharding',
+      order: 8,
+      content: 'Scale MongoDB horizontally.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'mongo-9',
+      courseId: 'mongodb',
+      title: 'Security',
+      description: 'Authentication, authorization, and security',
+      order: 9,
+      content: 'Secure your database.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    }
+  ],
+  angular: [
+    {
+      id: 'angular-1',
+      courseId: 'angular',
+      title: 'Angular Basics',
+      description: 'Components, templates, and Angular CLI',
+      order: 1,
+      content: 'Get started with Angular.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'angular-2',
+      courseId: 'angular',
+      title: 'Components',
+      description: 'Component architecture and lifecycle',
+      order: 2,
+      content: 'Build Angular components.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'angular-3',
+      courseId: 'angular',
+      title: 'Data Binding',
+      description: 'Property and event binding',
+      order: 3,
+      content: 'Master data binding.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'angular-4',
+      courseId: 'angular',
+      title: 'Directives',
+      description: 'Built-in and custom directives',
+      order: 4,
+      content: 'Work with directives.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'angular-5',
+      courseId: 'angular',
+      title: 'Services',
+      description: 'Dependency injection and services',
+      order: 5,
+      content: 'Create and use services.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'angular-6',
+      courseId: 'angular',
+      title: 'Routing',
+      description: 'Router and navigation',
+      order: 6,
+      content: 'Implement routing.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'angular-7',
+      courseId: 'angular',
+      title: 'Forms',
+      description: 'Template-driven and reactive forms',
+      order: 7,
+      content: 'Build forms in Angular.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'angular-8',
+      courseId: 'angular',
+      title: 'HTTP Client',
+      description: 'HTTP requests and observables',
+      order: 8,
+      content: 'Work with APIs.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'angular-9',
+      courseId: 'angular',
+      title: 'State Management',
+      description: 'NgRx and state management patterns',
+      order: 9,
+      content: 'Manage application state.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'angular-10',
+      courseId: 'angular',
+      title: 'Testing',
+      description: 'Unit and integration testing',
+      order: 10,
+      content: 'Test Angular applications.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  vue: [
+    {
+      id: 'vue-1',
+      courseId: 'vue',
+      title: 'Vue Basics',
+      description: 'Vue instance, templates, and directives',
+      order: 1,
+      content: 'Learn Vue fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'vue-2',
+      courseId: 'vue',
+      title: 'Components',
+      description: 'Component creation and props',
+      order: 2,
+      content: 'Build Vue components.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'vue-3',
+      courseId: 'vue',
+      title: 'Reactivity',
+      description: 'Data binding and computed properties',
+      order: 3,
+      content: 'Master Vue reactivity.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'vue-4',
+      courseId: 'vue',
+      title: 'Events',
+      description: 'Event handling and custom events',
+      order: 4,
+      content: 'Handle events in Vue.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'vue-5',
+      courseId: 'vue',
+      title: 'Vue Router',
+      description: 'Routing and navigation',
+      order: 5,
+      content: 'Implement routing.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'vue-6',
+      courseId: 'vue',
+      title: 'Vuex',
+      description: 'State management with Vuex',
+      order: 6,
+      content: 'Manage global state.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'vue-7',
+      courseId: 'vue',
+      title: 'Composition API',
+      description: 'Modern Vue composition patterns',
+      order: 7,
+      content: 'Use Composition API.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'vue-8',
+      courseId: 'vue',
+      title: 'API Integration',
+      description: 'HTTP requests and data fetching',
+      order: 8,
+      content: 'Connect to APIs.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'vue-9',
+      courseId: 'vue',
+      title: 'Testing',
+      description: 'Testing Vue applications',
+      order: 9,
+      content: 'Test Vue components.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    }
+  ],
+  django: [
+    {
+      id: 'django-1',
+      courseId: 'django',
+      title: 'Django Basics',
+      description: 'Django architecture and project setup',
+      order: 1,
+      content: 'Get started with Django.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'django-2',
+      courseId: 'django',
+      title: 'Models',
+      description: 'ORM and database models',
+      order: 2,
+      content: 'Create Django models.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'django-3',
+      courseId: 'django',
+      title: 'Views',
+      description: 'Function and class-based views',
+      order: 3,
+      content: 'Build Django views.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'django-4',
+      courseId: 'django',
+      title: 'Templates',
+      description: 'Django template language',
+      order: 4,
+      content: 'Create templates.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'django-5',
+      courseId: 'django',
+      title: 'Forms',
+      description: 'Form handling and validation',
+      order: 5,
+      content: 'Work with forms.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'django-6',
+      courseId: 'django',
+      title: 'Admin Interface',
+      description: 'Django admin customization',
+      order: 6,
+      content: 'Customize Django admin.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'django-7',
+      courseId: 'django',
+      title: 'Authentication',
+      description: 'User authentication and permissions',
+      order: 7,
+      content: 'Implement authentication.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'django-8',
+      courseId: 'django',
+      title: 'REST APIs',
+      description: 'Django REST Framework',
+      order: 8,
+      content: 'Build REST APIs.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'django-9',
+      courseId: 'django',
+      title: 'Testing',
+      description: 'Unit and integration testing',
+      order: 9,
+      content: 'Test Django applications.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'django-10',
+      courseId: 'django',
+      title: 'Deployment',
+      description: 'Deploying Django to production',
+      order: 10,
+      content: 'Deploy Django apps.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'django-11',
+      courseId: 'django',
+      title: 'Advanced Django',
+      description: 'Middleware, signals, and advanced topics',
+      order: 11,
+      content: 'Master advanced Django.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    }
+  ],
+  spring: [
+    {
+      id: 'spring-1',
+      courseId: 'spring',
+      title: 'Spring Basics',
+      description: 'Spring framework and dependency injection',
+      order: 1,
+      content: 'Learn Spring fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'spring-2',
+      courseId: 'spring',
+      title: 'Spring Boot',
+      description: 'Spring Boot and auto-configuration',
+      order: 2,
+      content: 'Build Spring Boot applications.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'spring-3',
+      courseId: 'spring',
+      title: 'REST APIs',
+      description: 'Building RESTful services',
+      order: 3,
+      content: 'Create REST endpoints.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'spring-4',
+      courseId: 'spring',
+      title: 'Spring Data',
+      description: 'JPA and database access',
+      order: 4,
+      content: 'Work with databases.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'spring-5',
+      courseId: 'spring',
+      title: 'Spring Security',
+      description: 'Authentication and authorization',
+      order: 5,
+      content: 'Secure your applications.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'spring-6',
+      courseId: 'spring',
+      title: 'Spring MVC',
+      description: 'Model-View-Controller pattern',
+      order: 6,
+      content: 'Build web applications.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'spring-7',
+      courseId: 'spring',
+      title: 'Microservices',
+      description: 'Spring Cloud and microservices',
+      order: 7,
+      content: 'Build microservices.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'spring-8',
+      courseId: 'spring',
+      title: 'Testing',
+      description: 'Unit and integration testing',
+      order: 8,
+      content: 'Test Spring applications.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'spring-9',
+      courseId: 'spring',
+      title: 'AOP',
+      description: 'Aspect-Oriented Programming',
+      order: 9,
+      content: 'Use AOP in Spring.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'spring-10',
+      courseId: 'spring',
+      title: 'Messaging',
+      description: 'RabbitMQ, Kafka integration',
+      order: 10,
+      content: 'Work with message queues.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'spring-11',
+      courseId: 'spring',
+      title: 'Caching',
+      description: 'Spring caching and Redis',
+      order: 11,
+      content: 'Implement caching.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'spring-12',
+      courseId: 'spring',
+      title: 'Advanced Spring',
+      description: 'Reactive programming and advanced topics',
+      order: 12,
+      content: 'Master advanced Spring.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  graphql: [
+    {
+      id: 'graphql-1',
+      courseId: 'graphql',
+      title: 'GraphQL Basics',
+      description: 'Query language fundamentals',
+      order: 1,
+      content: 'Learn GraphQL basics.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'graphql-2',
+      courseId: 'graphql',
+      title: 'Queries',
+      description: 'Writing GraphQL queries',
+      order: 2,
+      content: 'Query data with GraphQL.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'graphql-3',
+      courseId: 'graphql',
+      title: 'Mutations',
+      description: 'Modifying data with mutations',
+      order: 3,
+      content: 'Perform mutations.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'graphql-4',
+      courseId: 'graphql',
+      title: 'Schema Design',
+      description: 'Type system and schema design',
+      order: 4,
+      content: 'Design GraphQL schemas.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'graphql-5',
+      courseId: 'graphql',
+      title: 'Resolvers',
+      description: 'Writing resolver functions',
+      order: 5,
+      content: 'Implement resolvers.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'graphql-6',
+      courseId: 'graphql',
+      title: 'Subscriptions',
+      description: 'Real-time data with subscriptions',
+      order: 6,
+      content: 'Use GraphQL subscriptions.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'graphql-7',
+      courseId: 'graphql',
+      title: 'Apollo Client',
+      description: 'Frontend integration with Apollo',
+      order: 7,
+      content: 'Use Apollo Client.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'graphql-8',
+      courseId: 'graphql',
+      title: 'Best Practices',
+      description: 'Error handling and optimization',
+      order: 8,
+      content: 'Master GraphQL best practices.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  redis: [
+    {
+      id: 'redis-1',
+      courseId: 'redis',
+      title: 'Redis Basics',
+      description: 'Key-value store fundamentals',
+      order: 1,
+      content: 'Learn Redis basics.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'redis-2',
+      courseId: 'redis',
+      title: 'Data Types',
+      description: 'Strings, lists, sets, and hashes',
+      order: 2,
+      content: 'Work with Redis data types.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'redis-3',
+      courseId: 'redis',
+      title: 'Caching',
+      description: 'Implementing caching strategies',
+      order: 3,
+      content: 'Use Redis for caching.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'redis-4',
+      courseId: 'redis',
+      title: 'Pub/Sub',
+      description: 'Publish-subscribe messaging',
+      order: 4,
+      content: 'Implement pub/sub patterns.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'redis-5',
+      courseId: 'redis',
+      title: 'Transactions',
+      description: 'Redis transactions and pipelines',
+      order: 5,
+      content: 'Use transactions.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'redis-6',
+      courseId: 'redis',
+      title: 'Persistence',
+      description: 'RDB and AOF persistence',
+      order: 6,
+      content: 'Configure persistence.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'redis-7',
+      courseId: 'redis',
+      title: 'Advanced Redis',
+      description: 'Clustering, replication, and optimization',
+      order: 7,
+      content: 'Master advanced Redis.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    }
+  ],
+  firebase: [
+    {
+      id: 'firebase-1',
+      courseId: 'firebase',
+      title: 'Firebase Basics',
+      description: 'Firebase platform overview',
+      order: 1,
+      content: 'Get started with Firebase.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'firebase-2',
+      courseId: 'firebase',
+      title: 'Authentication',
+      description: 'User authentication methods',
+      order: 2,
+      content: 'Implement authentication.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'firebase-3',
+      courseId: 'firebase',
+      title: 'Firestore',
+      description: 'Cloud Firestore database',
+      order: 3,
+      content: 'Store data in Firestore.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'firebase-4',
+      courseId: 'firebase',
+      title: 'Realtime Database',
+      description: 'Realtime Database operations',
+      order: 4,
+      content: 'Use Realtime Database.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'firebase-5',
+      courseId: 'firebase',
+      title: 'Storage',
+      description: 'Cloud Storage for files',
+      order: 5,
+      content: 'Upload and manage files.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'firebase-6',
+      courseId: 'firebase',
+      title: 'Cloud Functions',
+      description: 'Serverless functions',
+      order: 6,
+      content: 'Write cloud functions.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'firebase-7',
+      courseId: 'firebase',
+      title: 'Hosting',
+      description: 'Firebase Hosting and deployment',
+      order: 7,
+      content: 'Deploy web applications.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'firebase-8',
+      courseId: 'firebase',
+      title: 'Security Rules',
+      description: 'Database security rules',
+      order: 8,
+      content: 'Secure your database.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'firebase-9',
+      courseId: 'firebase',
+      title: 'Analytics',
+      description: 'Firebase Analytics and monitoring',
+      order: 9,
+      content: 'Track app analytics.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    }
+  ],
+  swift: [
+    {
+      id: 'swift-1',
+      courseId: 'swift',
+      title: 'Swift Basics',
+      description: 'Variables, types, and control flow',
+      order: 1,
+      content: 'Learn Swift fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'swift-2',
+      courseId: 'swift',
+      title: 'Optionals',
+      description: 'Optional types and unwrapping',
+      order: 2,
+      content: 'Work with optionals.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'swift-3',
+      courseId: 'swift',
+      title: 'Collections',
+      description: 'Arrays, dictionaries, and sets',
+      order: 3,
+      content: 'Use Swift collections.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'swift-4',
+      courseId: 'swift',
+      title: 'OOP in Swift',
+      description: 'Classes, structs, and protocols',
+      order: 4,
+      content: 'Learn Swift OOP.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'swift-5',
+      courseId: 'swift',
+      title: 'Closures',
+      description: 'Closures and higher-order functions',
+      order: 5,
+      content: 'Master closures.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'swift-6',
+      courseId: 'swift',
+      title: 'SwiftUI',
+      description: 'Building UIs with SwiftUI',
+      order: 6,
+      content: 'Create SwiftUI interfaces.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'swift-7',
+      courseId: 'swift',
+      title: 'UIKit',
+      description: 'UIKit framework basics',
+      order: 7,
+      content: 'Build UIKit applications.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'swift-8',
+      courseId: 'swift',
+      title: 'Networking',
+      description: 'URLSession and API calls',
+      order: 8,
+      content: 'Connect to APIs.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'swift-9',
+      courseId: 'swift',
+      title: 'Core Data',
+      description: 'Local data persistence',
+      order: 9,
+      content: 'Store data locally.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'swift-10',
+      courseId: 'swift',
+      title: 'Advanced Swift',
+      description: 'Generics, protocols, and advanced topics',
+      order: 10,
+      content: 'Master advanced Swift.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  php: [
+    {
+      id: 'php-1',
+      courseId: 'php',
+      title: 'PHP Basics',
+      description: 'Syntax, variables, and basic operations',
+      order: 1,
+      content: 'Learn PHP fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'php-2',
+      courseId: 'php',
+      title: 'Control Structures',
+      description: 'If-else, loops, and switch',
+      order: 2,
+      content: 'Master control flow.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'php-3',
+      courseId: 'php',
+      title: 'Functions',
+      description: 'Function definition and scope',
+      order: 3,
+      content: 'Work with functions.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'php-4',
+      courseId: 'php',
+      title: 'Arrays',
+      description: 'Array operations and functions',
+      order: 4,
+      content: 'Use PHP arrays.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'php-5',
+      courseId: 'php',
+      title: 'OOP',
+      description: 'Classes, objects, and inheritance',
+      order: 5,
+      content: 'Learn PHP OOP.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'php-6',
+      courseId: 'php',
+      title: 'MySQL',
+      description: 'Database connection and queries',
+      order: 6,
+      content: 'Connect to databases.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'php-7',
+      courseId: 'php',
+      title: 'Forms',
+      description: 'Form handling and validation',
+      order: 7,
+      content: 'Process forms.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'php-8',
+      courseId: 'php',
+      title: 'Sessions',
+      description: 'Session management and cookies',
+      order: 8,
+      content: 'Manage user sessions.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'php-9',
+      courseId: 'php',
+      title: 'Security',
+      description: 'SQL injection, XSS prevention',
+      order: 9,
+      content: 'Secure PHP applications.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'php-10',
+      courseId: 'php',
+      title: 'Laravel',
+      description: 'Laravel framework basics',
+      order: 10,
+      content: 'Build with Laravel.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    }
+  ],
+  ruby: [
+    {
+      id: 'ruby-1',
+      courseId: 'ruby',
+      title: 'Ruby Basics',
+      description: 'Syntax, variables, and data types',
+      order: 1,
+      content: 'Learn Ruby fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'ruby-2',
+      courseId: 'ruby',
+      title: 'Control Flow',
+      description: 'Conditionals and loops',
+      order: 2,
+      content: 'Master control structures.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'ruby-3',
+      courseId: 'ruby',
+      title: 'Methods',
+      description: 'Method definition and blocks',
+      order: 3,
+      content: 'Work with methods.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ruby-4',
+      courseId: 'ruby',
+      title: 'OOP',
+      description: 'Classes, modules, and inheritance',
+      order: 4,
+      content: 'Learn Ruby OOP.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ruby-5',
+      courseId: 'ruby',
+      title: 'Rails Basics',
+      description: 'Rails framework introduction',
+      order: 5,
+      content: 'Get started with Rails.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ruby-6',
+      courseId: 'ruby',
+      title: 'Models',
+      description: 'ActiveRecord and database models',
+      order: 6,
+      content: 'Create Rails models.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ruby-7',
+      courseId: 'ruby',
+      title: 'Controllers',
+      description: 'Rails controllers and routing',
+      order: 7,
+      content: 'Build controllers.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ruby-8',
+      courseId: 'ruby',
+      title: 'Views',
+      description: 'ERB templates and helpers',
+      order: 8,
+      content: 'Create views.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'ruby-9',
+      courseId: 'ruby',
+      title: 'Testing',
+      description: 'RSpec and testing in Rails',
+      order: 9,
+      content: 'Test Rails applications.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ruby-10',
+      courseId: 'ruby',
+      title: 'API Development',
+      description: 'Building REST APIs with Rails',
+      order: 10,
+      content: 'Create APIs.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'ruby-11',
+      courseId: 'ruby',
+      title: 'Advanced Rails',
+      description: 'Background jobs, caching, and optimization',
+      order: 11,
+      content: 'Master advanced Rails.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    }
+  ],
+  linux: [
+    {
+      id: 'linux-1',
+      courseId: 'linux',
+      title: 'Linux Basics',
+      description: 'File system and basic commands',
+      order: 1,
+      content: 'Learn Linux fundamentals.',
+      testType: 'mcq',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'linux-2',
+      courseId: 'linux',
+      title: 'File Management',
+      description: 'Creating, moving, and deleting files',
+      order: 2,
+      content: 'Manage files and directories.',
+      testType: 'coding',
+      difficulty: 'Easy'
+    },
+    {
+      id: 'linux-3',
+      courseId: 'linux',
+      title: 'Permissions',
+      description: 'File permissions and ownership',
+      order: 3,
+      content: 'Set file permissions.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'linux-4',
+      courseId: 'linux',
+      title: 'Process Management',
+      description: 'Managing processes and services',
+      order: 4,
+      content: 'Control system processes.',
+      testType: 'coding',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'linux-5',
+      courseId: 'linux',
+      title: 'Networking',
+      description: 'Network configuration and tools',
+      order: 5,
+      content: 'Configure networks.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'linux-6',
+      courseId: 'linux',
+      title: 'Shell Scripting',
+      description: 'Bash scripting and automation',
+      order: 6,
+      content: 'Write shell scripts.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'linux-7',
+      courseId: 'linux',
+      title: 'Package Management',
+      description: 'apt, yum, and software installation',
+      order: 7,
+      content: 'Install and manage packages.',
+      testType: 'mcq',
+      difficulty: 'Medium'
+    },
+    {
+      id: 'linux-8',
+      courseId: 'linux',
+      title: 'System Administration',
+      description: 'User management and system config',
+      order: 8,
+      content: 'Administer Linux systems.',
+      testType: 'coding',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'linux-9',
+      courseId: 'linux',
+      title: 'Security',
+      description: 'Firewalls, SSH, and security hardening',
+      order: 9,
+      content: 'Secure Linux systems.',
+      testType: 'mcq',
+      difficulty: 'Hard'
+    },
+    {
+      id: 'linux-10',
+      courseId: 'linux',
+      title: 'Advanced Administration',
+      description: 'Logs, monitoring, and troubleshooting',
+      order: 10,
+      content: 'Master Linux administration.',
       testType: 'coding',
       difficulty: 'Hard'
     }
