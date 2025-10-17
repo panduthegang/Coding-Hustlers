@@ -463,7 +463,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 1,
       content: 'Learn Java basics and write your first programs.',
       testType: 'mcq',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      topics: [
+        'Understand Java syntax and program structure',
+        'Declare and use variables with proper naming',
+        'Work with primitive and reference data types',
+        'Apply arithmetic, logical, and comparison operators'
+      ]
     },
     {
       id: 'java-2',
@@ -473,7 +479,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 2,
       content: 'Master control flow in Java.',
       testType: 'coding',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      topics: [
+        'Use if-else statements for conditional logic',
+        'Implement switch statements for multi-way branching',
+        'Work with for, while, and do-while loops',
+        'Control loop execution with break and continue'
+      ]
     },
     {
       id: 'java-3',
@@ -483,7 +495,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 3,
       content: 'Learn to work with arrays and strings effectively.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Create and manipulate single and multi-dimensional arrays',
+        'Use String class methods for text processing',
+        'Understand String immutability and StringBuilder',
+        'Perform array operations and string manipulation'
+      ]
     },
     {
       id: 'java-4',
@@ -493,7 +511,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 4,
       content: 'Understand OOP concepts in Java.',
       testType: 'coding',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Create classes and instantiate objects',
+        'Implement inheritance and method overriding',
+        'Apply encapsulation with access modifiers',
+        'Use polymorphism for flexible code design'
+      ]
     },
     {
       id: 'java-5',
@@ -503,7 +527,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 5,
       content: 'Learn about interfaces and abstract classes.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Define and implement interfaces',
+        'Create and extend abstract classes',
+        'Understand abstraction principles',
+        'Choose between interfaces and abstract classes'
+      ]
     },
     {
       id: 'java-6',
@@ -513,7 +543,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 6,
       content: 'Master the Java Collections Framework.',
       testType: 'coding',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      topics: [
+        'Work with List implementations (ArrayList, LinkedList)',
+        'Use Set implementations for unique elements',
+        'Implement Map interface for key-value storage',
+        'Iterate over collections using iterators and loops'
+      ]
     },
     {
       id: 'java-7',
@@ -523,7 +559,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 7,
       content: 'Handle exceptions properly in Java.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Use try-catch blocks for exception handling',
+        'Understand checked vs unchecked exceptions',
+        'Create and throw custom exceptions',
+        'Implement finally blocks for cleanup code'
+      ]
     },
     {
       id: 'java-8',
@@ -533,7 +575,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 8,
       content: 'Learn file operations in Java.',
       testType: 'coding',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Read from files using FileReader and BufferedReader',
+        'Write to files using FileWriter and BufferedWriter',
+        'Work with file paths and directories',
+        'Handle I/O exceptions properly'
+      ]
     },
     {
       id: 'java-9',
@@ -543,7 +591,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 9,
       content: 'Understand multithreading concepts.',
       testType: 'mcq',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      topics: [
+        'Create and start threads using Thread and Runnable',
+        'Understand thread lifecycle and states',
+        'Implement synchronization to prevent race conditions',
+        'Use concurrent collections for thread-safe operations'
+      ]
     },
     {
       id: 'java-10',
@@ -553,7 +607,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 10,
       content: 'Master advanced Java programming.',
       testType: 'coding',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      topics: [
+        'Write lambda expressions for functional programming',
+        'Use Stream API for data processing',
+        'Apply method references and functional interfaces',
+        'Leverage Optional class for null safety'
+      ]
     }
   ],
   webdev: [
@@ -565,7 +625,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 1,
       content: 'Learn HTML fundamentals and structure.',
       testType: 'mcq',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      topics: [
+        'Understand HTML elements and semantic tags',
+        'Work with attributes and their values',
+        'Create proper document structure with head and body',
+        'Use forms, lists, and links effectively'
+      ]
     },
     {
       id: 'web-2',
@@ -575,7 +641,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 2,
       content: 'Style your web pages with CSS.',
       testType: 'coding',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      topics: [
+        'Use CSS selectors to target elements',
+        'Apply properties for colors, fonts, and spacing',
+        'Understand the box model (margin, padding, border)',
+        'Style text and backgrounds effectively'
+      ]
     },
     {
       id: 'web-3',
@@ -585,7 +657,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 3,
       content: 'Create responsive layouts with modern CSS.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Build flexible layouts with Flexbox',
+        'Create complex grid-based designs with CSS Grid',
+        'Implement responsive design with media queries',
+        'Understand mobile-first design principles'
+      ]
     },
     {
       id: 'web-4',
@@ -595,7 +673,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 4,
       content: 'Learn JavaScript fundamentals.',
       testType: 'coding',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      topics: [
+        'Declare and use variables with let, const, and var',
+        'Create and call functions with parameters',
+        'Manipulate the DOM to change page content',
+        'Handle events like clicks and form submissions'
+      ]
     },
     {
       id: 'web-5',
@@ -605,7 +689,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 5,
       content: 'Master advanced JavaScript concepts.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Understand closures and lexical scoping',
+        'Work with promises for asynchronous operations',
+        'Use async/await for cleaner async code',
+        'Apply ES6+ features like arrow functions and destructuring'
+      ]
     },
     {
       id: 'web-6',
@@ -615,7 +705,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 6,
       content: 'Learn to work with APIs and external data.',
       testType: 'coding',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Understand REST API concepts and HTTP methods',
+        'Use Fetch API to make HTTP requests',
+        'Handle JSON data from API responses',
+        'Implement error handling for network requests'
+      ]
     },
     {
       id: 'web-7',
@@ -625,7 +721,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 7,
       content: 'Store data in the browser.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Use localStorage to persist data across sessions',
+        'Work with sessionStorage for temporary data',
+        'Store and retrieve complex data with JSON',
+        'Implement basic state management patterns'
+      ]
     },
     {
       id: 'web-8',
@@ -635,7 +737,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 8,
       content: 'Create and validate web forms.',
       testType: 'coding',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Create forms with various input types',
+        'Implement client-side validation rules',
+        'Handle form submission and prevent defaults',
+        'Provide user feedback for validation errors'
+      ]
     },
     {
       id: 'web-9',
@@ -645,7 +753,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 9,
       content: 'Use CSS frameworks for rapid development.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Use Bootstrap grid system and components',
+        'Apply Tailwind utility classes for styling',
+        'Customize framework themes and variables',
+        'Understand when to use frameworks vs custom CSS'
+      ]
     },
     {
       id: 'web-10',
@@ -655,7 +769,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 10,
       content: 'Set up modern build tools.',
       testType: 'coding',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      topics: [
+        'Configure Webpack for project bundling',
+        'Use Vite for fast development experience',
+        'Understand module bundlers and their purpose',
+        'Optimize builds for production deployment'
+      ]
     },
     {
       id: 'web-11',
@@ -665,7 +785,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 11,
       content: 'Optimize your web applications.',
       testType: 'mcq',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      topics: [
+        'Optimize images and assets for faster loading',
+        'Implement lazy loading and code splitting',
+        'Reduce render-blocking resources',
+        'Measure performance with Chrome DevTools'
+      ]
     },
     {
       id: 'web-12',
@@ -675,7 +801,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 12,
       content: 'Deploy your web applications.',
       testType: 'coding',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Choose appropriate hosting platforms (Vercel, Netlify, etc.)',
+        'Configure custom domains and DNS settings',
+        'Set up continuous deployment with Git',
+        'Understand environment variables and production configs'
+      ]
     }
   ],
   react: [
