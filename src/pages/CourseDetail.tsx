@@ -6,6 +6,7 @@ import ChapterOverview from '../components/ChapterOverview';
 import { useAuth } from '../contexts/AuthContext';
 import { courses, chapters } from '../lib/courseData';
 import { getCourseProgress, enrollInCourse, subscribeToCourseProgress, CourseProgress } from '../services/firestore';
+import { generateDefaultTopics } from '../lib/topicsGenerator';
 import type { Chapter } from '../types/course';
 
 const CourseDetail = () => {
@@ -19,6 +20,10 @@ const CourseDetail = () => {
 
   const course = courses.find(c => c.id === courseId);
   const courseChapters = courseId ? chapters[courseId] || [] : [];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [courseId]);
 
   useEffect(() => {
     if (!currentUser || !courseId) return;
@@ -174,97 +179,116 @@ const CourseDetail = () => {
             )}
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {courseChapters.map((chapter) => {
               const unlocked = isChapterUnlocked(chapter.order);
               const completed = isCompleted(chapter.order);
               const score = getChapterScore(chapter.order);
+              const chapterTopics = chapter.topics || generateDefaultTopics(chapter.description, chapter.title);
 
               return (
                 <div
                   key={chapter.id}
-                  onClick={() => unlocked && handleChapterClick(chapter)}
-                  className={`relative bg-white/60 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-white/40 transition-all duration-300 ${
+                  className={`relative bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-md border-2 transition-all duration-300 ${
                     unlocked
-                      ? 'cursor-pointer hover:shadow-2xl hover:scale-[1.01]'
-                      : 'opacity-60 cursor-not-allowed'
+                      ? 'border-gray-200 hover:shadow-xl hover:border-purple-300'
+                      : 'border-gray-200 opacity-60 cursor-not-allowed'
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`flex-shrink-0 w-12 h-12 rounded-xl ${
+                  <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+                    <div className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 flex items-center justify-center shadow-sm transition-all ${
                       completed
-                        ? 'bg-gradient-to-br from-green-400 to-emerald-500'
+                        ? 'border-green-500 bg-green-50'
                         : unlocked
-                        ? `bg-gradient-to-br ${course.color}`
-                        : 'bg-gray-300'
-                    } flex items-center justify-center shadow-md`}>
+                        ? 'border-purple-500 bg-purple-50'
+                        : 'border-gray-300 bg-gray-50'
+                    }`}>
                       {completed ? (
-                        <CheckCircle className="w-6 h-6 text-white" />
+                        <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-green-500" />
                       ) : unlocked ? (
-                        <PlayCircle className="w-6 h-6 text-white" />
+                        <PlayCircle className="w-8 h-8 sm:w-10 sm:h-10 text-purple-500" />
                       ) : (
-                        <Lock className="w-6 h-6 text-white" />
+                        <Lock className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
                       )}
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4 mb-2">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-1">
-                            <span className="text-sm font-['Poppins'] font-bold text-gray-500">
-                              Chapter {chapter.order}
-                            </span>
-                            <div className={`px-2 py-1 rounded text-xs font-bold font-['Poppins'] text-white ${
-                              chapter.testType === 'mcq'
-                                ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
-                                : 'bg-gradient-to-r from-purple-500 to-pink-500'
-                            }`}>
-                              {chapter.testType === 'mcq' ? 'MCQ TEST' : 'CODING'}
-                            </div>
-                          </div>
-                          <h3 className="text-lg lg:text-xl font-bold font-['Syne'] text-gray-800 mb-1">
-                            {chapter.title}
+                    <div className="flex-1 min-w-0 w-full">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold font-['Syne'] text-gray-900 mb-2">
+                            Level {chapter.order}: {chapter.title}
                           </h3>
-                          <p className="text-sm text-gray-600 font-['Syne'] mb-2">
+                          <p className="text-sm sm:text-base text-gray-600 font-['Syne'] mb-4">
                             {chapter.description}
                           </p>
-                          {score && (
-                            <div className="flex items-center gap-2 text-sm">
-                              <Trophy className={`w-4 h-4 ${score.completed ? 'text-green-600' : 'text-orange-600'}`} />
-                              <span className="font-['Poppins'] font-bold text-gray-700">
-                                MCQ: {score.mcqScore}% | Coding: {score.codingScore}%
-                              </span>
-                            </div>
-                          )}
                         </div>
 
-                        <div className="flex flex-col items-end gap-2">
-                          <div className={`px-3 py-1 rounded-lg text-xs font-bold font-['Poppins'] ${
-                            chapter.difficulty === 'Easy'
-                              ? 'bg-green-100 text-green-700'
-                              : chapter.difficulty === 'Medium'
-                              ? 'bg-yellow-100 text-yellow-700'
-                              : 'bg-red-100 text-red-700'
-                          }`}>
-                            {chapter.difficulty}
-                          </div>
-                          {completed && (
-                            <div className="flex items-center gap-1 text-xs text-green-600 font-['Syne'] font-medium">
-                              <CheckCircle className="w-3 h-3" />
-                              Completed
-                            </div>
-                          )}
+                        <div className={`self-start px-3 py-1.5 rounded-md text-xs font-bold font-['Poppins'] text-white whitespace-nowrap flex-shrink-0 ${
+                          chapter.testType === 'mcq'
+                            ? 'bg-blue-500'
+                            : 'bg-purple-600'
+                        }`}>
+                          {chapter.testType === 'mcq' ? 'MCQ' : 'CODING'}
                         </div>
                       </div>
+
+                      {chapterTopics && chapterTopics.length > 0 && (
+                        <div className="bg-gray-50 rounded-xl p-3 sm:p-4 mb-4 border border-gray-200">
+                          <h4 className="text-xs sm:text-sm font-bold text-gray-700 font-['Syne'] mb-2 sm:mb-3">Learning Objectives:</h4>
+                          <ul className="space-y-1.5 sm:space-y-2">
+                            {chapterTopics.slice(0, 4).map((topic, index) => (
+                              <li key={index} className="flex items-start gap-2 text-xs sm:text-sm text-gray-600 font-['Syne']">
+                                <span className="text-purple-500 mt-0.5 sm:mt-1 flex-shrink-0">●</span>
+                                <span className="break-words">{topic}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-600 mb-4">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
+                          <span className="font-['Syne']">20 min</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
+                          <span className="font-['Syne']">12 questions</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
+                          <span className="font-['Syne']">60% to pass</span>
+                        </div>
+                        {completed && score && (
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-green-600 font-bold w-full sm:w-auto">
+                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                            <span className="font-['Poppins'] text-xs sm:text-sm">
+                              MCQ: {score.mcqScore}% | Coding: {score.codingScore}%
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => unlocked && handleChapterClick(chapter)}
+                        disabled={!unlocked}
+                        className={`w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl font-['Syne'] font-semibold text-white text-sm sm:text-base transition-all ${
+                          unlocked
+                            ? 'bg-gradient-to-r from-purple-600 to-purple-400 hover:from-purple-700 hover:to-purple-500 shadow-md hover:shadow-lg'
+                            : 'bg-gray-300 cursor-not-allowed'
+                        }`}
+                      >
+                        {completed ? 'Review Level' : 'Start Level'}
+                      </button>
                     </div>
                   </div>
 
                   {!unlocked && (
-                    <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] rounded-2xl flex items-center justify-center">
-                      <div className="bg-white/90 rounded-xl px-6 py-3 shadow-lg">
+                    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-3xl flex items-center justify-center">
+                      <div className="bg-white rounded-xl px-6 py-3 shadow-lg border-2 border-gray-200">
                         <div className="flex items-center gap-2 text-gray-700 font-['Syne'] font-semibold">
                           <Lock className="w-5 h-5" />
-                          Complete previous chapter to unlock
+                          Complete previous level to unlock
                         </div>
                       </div>
                     </div>

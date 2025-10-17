@@ -246,31 +246,31 @@ const Courses = () => {
           </header>
 
           {latestCourse && (
-            <div className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200/50 shadow-lg">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl shadow-lg">
+            <div className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 sm:p-6 border border-blue-200/50 shadow-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl sm:text-3xl shadow-lg flex-shrink-0">
                     {courses.find(c => c.id === latestCourse.courseId)?.icon}
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-600 font-['Syne'] mb-1 flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm text-gray-600 font-['Syne'] mb-1 flex items-center gap-2">
+                      <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                       Continue Learning
                     </p>
-                    <h3 className="text-xl font-bold font-['Syne'] text-gray-800">
+                    <h3 className="text-base sm:text-xl font-bold font-['Syne'] text-gray-800 truncate">
                       {courses.find(c => c.id === latestCourse.courseId)?.title}
                     </h3>
-                    <p className="text-sm text-gray-600 font-['Syne'] mt-1">
+                    <p className="text-xs sm:text-sm text-gray-600 font-['Syne'] mt-1">
                       Chapter {latestCourse.currentChapter} • {latestCourse.completedChapters.length} completed
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => navigate(`/course/${latestCourse.courseId}`)}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-['Syne'] font-semibold hover:shadow-xl transition-all flex items-center gap-2"
+                  className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-['Syne'] text-sm sm:text-base font-semibold hover:shadow-xl transition-all flex items-center justify-center gap-2 flex-shrink-0"
                 >
                   Resume
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
               <div className="mt-4">

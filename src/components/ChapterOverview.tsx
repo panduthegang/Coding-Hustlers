@@ -107,49 +107,49 @@ const ChapterOverview = ({ chapterTitle, chapterDescription, difficulty, onConti
       `
     }}>
       <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] p-6 rounded-t-2xl">
+        <div className="sticky top-0 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] p-4 sm:p-6 rounded-t-2xl">
           <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <BookOpen className="w-8 h-8 text-white" />
-                <h2 className="text-2xl font-bold font-['Syne'] text-white">Chapter Overview</h2>
+            <div className="flex-1 pr-2">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                <h2 className="text-lg sm:text-2xl font-bold font-['Syne'] text-white">Chapter Overview</h2>
               </div>
-              <h3 className="text-xl font-semibold font-['Syne'] text-white/90">{chapterTitle}</h3>
+              <h3 className="text-base sm:text-xl font-semibold font-['Syne'] text-white/90">{chapterTitle}</h3>
             </div>
             <button
               onClick={onContinue}
-              className="ml-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="ml-2 sm:ml-4 p-2 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0"
             >
-              <X className="w-6 h-6 text-white" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </button>
           </div>
         </div>
 
-        <div className="p-8 space-y-6">
+        <div className="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
           <div>
-            <h4 className="font-['Syne'] font-bold text-gray-800 text-lg mb-3 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-purple-600" />
+            <h4 className="font-['Syne'] font-bold text-gray-800 text-base sm:text-lg mb-2 sm:mb-3 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 flex-shrink-0" />
               What You Will Learn
             </h4>
-            <p className="text-gray-700 font-['Syne'] leading-relaxed text-base">
+            <p className="text-gray-700 font-['Syne'] leading-relaxed text-sm sm:text-base">
               {content.overview}
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl p-6">
-            <h4 className="font-['Syne'] font-bold text-gray-800 text-lg mb-3 flex items-center gap-2">
-              <Lightbulb className="w-5 h-5 text-yellow-600" />
+          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl p-4 sm:p-6">
+            <h4 className="font-['Syne'] font-bold text-gray-800 text-base sm:text-lg mb-2 sm:mb-3 flex items-center gap-2">
+              <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 flex-shrink-0" />
               Pro Tip
             </h4>
-            <p className="text-gray-700 font-['Syne'] leading-relaxed text-base">
+            <p className="text-gray-700 font-['Syne'] leading-relaxed text-sm sm:text-base">
               {content.proTip}
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row gap-4 pt-2 sm:pt-4">
             <button
               onClick={onContinue}
-              className="flex-1 py-4 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-xl font-['Syne'] text-lg font-semibold hover:opacity-90 transition-opacity"
+              className="flex-1 py-3 sm:py-4 bg-gradient-to-r from-[#B33DEB] to-[#DE8FFF] text-white rounded-xl font-['Syne'] text-base sm:text-lg font-semibold hover:opacity-90 transition-opacity"
             >
               Start Chapter Test
             </button>

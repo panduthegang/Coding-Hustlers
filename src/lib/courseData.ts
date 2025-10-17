@@ -333,7 +333,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 1,
       content: 'Learn the fundamentals of Python programming including variables, data types, and basic operations.',
       testType: 'mcq',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      topics: [
+        'Understand variables and naming conventions',
+        'Work with different data types (strings, numbers, booleans)',
+        'Use arithmetic and comparison operators',
+        'Perform basic input and output operations'
+      ]
     },
     {
       id: 'python-2',
@@ -343,7 +349,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 2,
       content: 'Master control flow in Python with if-else statements, for loops, and while loops.',
       testType: 'coding',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      topics: [
+        'Use if-else statements',
+        'Implement switch cases',
+        'Work with for and while loops',
+        'Understand break and continue'
+      ]
     },
     {
       id: 'python-3',
@@ -353,7 +365,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 3,
       content: 'Learn to create reusable code with functions, understand scope, and work with parameters.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Define and call functions',
+        'Work with parameters and arguments',
+        'Use return values effectively',
+        'Understand variable scope'
+      ]
     },
     {
       id: 'python-4',
@@ -363,7 +381,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 4,
       content: 'Explore Python data structures and their use cases.',
       testType: 'coding',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Work with lists and tuples',
+        'Use dictionaries for key-value pairs',
+        'Understand sets and their operations',
+        'Choose the right data structure'
+      ]
     },
     {
       id: 'python-5',
@@ -373,7 +397,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 5,
       content: 'Understand OOP principles and how to apply them in Python.',
       testType: 'mcq',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Create classes and objects',
+        'Implement inheritance',
+        'Use polymorphism',
+        'Apply encapsulation principles'
+      ]
     },
     {
       id: 'python-6',
@@ -383,7 +413,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 6,
       content: 'Learn to read from and write to files in Python.',
       testType: 'coding',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      topics: [
+        'Open and close files properly',
+        'Read file contents in different modes',
+        'Write and append to files',
+        'Handle file paths and directories'
+      ]
     },
     {
       id: 'python-7',
@@ -393,7 +429,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 7,
       content: 'Handle errors gracefully with exception handling.',
       testType: 'mcq',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      topics: [
+        'Use try-except blocks',
+        'Handle specific exceptions',
+        'Raise custom exceptions',
+        'Implement finally clauses'
+      ]
     },
     {
       id: 'python-8',
@@ -403,7 +445,13 @@ export const chapters: Record<string, Chapter[]> = {
       order: 8,
       content: 'Master advanced Python concepts and techniques.',
       testType: 'coding',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      topics: [
+        'Create and use decorators',
+        'Work with generators and iterators',
+        'Use lambda functions',
+        'Understand list comprehensions'
+      ]
     }
   ],
   java: [

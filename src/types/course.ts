@@ -18,6 +18,7 @@ export interface Chapter {
   content: string;
   testType: 'mcq' | 'coding';
   difficulty: string;
+  topics?: string[];
 }
 
 export interface CourseProgress {
