@@ -103,24 +103,34 @@ export async function generateCodingProblem(topic: string, difficulty: string) {
 }
 
 export async function evaluateCode(code: string, problem: string, testCases: any[]) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.0-flash',
+    generationConfig: {
+      responseMimeType: "application/json",
+      temperature: 0.7
+    }
+  });
 
   const prompt = `Evaluate the following code solution for this problem:
 
   Problem: ${problem}
 
-  Code:
+  User's Code (DO NOT include this code in your response):
   ${code}
 
   Test Cases: ${JSON.stringify(testCases)}
 
-  IMPORTANT: Do NOT use asterisks or markdown formatting in your feedback. Use plain text only.
+  IMPORTANT:
+  - Return ONLY valid JSON
+  - Do NOT use asterisks or markdown formatting in your feedback
+  - Use plain text only in all string values
+  - Keep feedback concise (max 200 words)
 
-  Return a JSON object with:
+  Return exactly this JSON structure:
   {
     "passed": true/false,
     "score": number (0-100),
-    "feedback": "Detailed feedback on the code in plain text without asterisks",
+    "feedback": "Detailed feedback on the code in plain text",
     "testResults": [
       {
         "passed": true/false,
@@ -130,22 +140,40 @@ export async function evaluateCode(code: string, problem: string, testCases: any
     ]
   }`;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    let text = response.text().trim();
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    const parsed = JSON.parse(jsonMatch[0]);
-    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+    // Remove markdown code blocks if present
+    text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+
+    // Try to extract JSON if wrapped in text
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    }
+
+    const parsed = JSON.parse(text);
+    const cleanText = (str: string) => {
+      if (!str) return '';
+      return str
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+        .trim();
+    };
 
     return {
-      ...parsed,
-      feedback: cleanText(parsed.feedback)
+      passed: parsed.passed === true,
+      score: typeof parsed.score === 'number' ? parsed.score : 0,
+      feedback: cleanText(parsed.feedback || parsed.Feedback || ''),
+      testResults: Array.isArray(parsed.testResults) ? parsed.testResults : []
     };
+  } catch (error) {
+    console.error('Error parsing evaluation response:', error, error instanceof Error ? error.message : '');
+    throw new Error('Failed to evaluate code. Please try again.');
   }
-
-  throw new Error('Failed to evaluate code');
 }
 
 export async function generateMCQQuestions(courseTopic: string, chapterTitle: string, chapterDescription: string, count: number = 5) {
@@ -222,43 +250,68 @@ export async function generateCodingChallenge(courseTopic: string, chapterTitle:
 }
 
 export async function evaluateCodingChallenge(challengeTitle: string, challengeDescription: string, code: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.0-flash',
+    generationConfig: {
+      responseMimeType: "application/json",
+      temperature: 0.7
+    }
+  });
 
   const prompt = `Evaluate the following code solution for this coding challenge:
 
   Challenge: ${challengeTitle}
   Description: ${challengeDescription}
 
-  User's Code:
+  User's Code (DO NOT include this code in your response):
   ${code}
 
-  IMPORTANT: Do NOT use asterisks or markdown formatting in your feedback. Use plain text only.
+  IMPORTANT:
+  - Return ONLY valid JSON
+  - Do NOT use asterisks or markdown formatting in your feedback
+  - Use plain text only in all string values
+  - Keep feedback concise (max 200 words)
 
-  Return a JSON object with:
+  Return exactly this JSON structure:
   {
     "score": number (0-100, where 60+ is passing),
-    "feedback": "Detailed constructive feedback on the code quality, correctness, efficiency, and suggestions for improvement (plain text, no asterisks)"
+    "feedback": "Detailed constructive feedback on the code quality, correctness, efficiency, and suggestions for improvement"
   }
 
-  Be fair but constructive in your evaluation. Consider correctness, code quality, and approach.
-  Remember: Use only plain text without asterisks or markdown formatting.`;
+  Be fair but constructive in your evaluation. Consider correctness, code quality, and approach.`;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    let text = response.text().trim();
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    const parsed = JSON.parse(jsonMatch[0]);
-    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+    // Remove markdown code blocks if present
+    text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+
+    // Try to extract JSON if wrapped in text
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    }
+
+    const parsed = JSON.parse(text);
+    const cleanText = (str: string) => {
+      if (!str) return '';
+      return str
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+        .trim();
+    };
 
     return {
-      ...parsed,
-      feedback: cleanText(parsed.feedback)
+      score: typeof parsed.score === 'number' ? parsed.score : 50,
+      feedback: cleanText(parsed.feedback || parsed.Feedback || 'Code submitted successfully.')
     };
+  } catch (error) {
+    console.error('Error parsing evaluation response:', error, error instanceof Error ? error.message : '');
+    throw new Error('Failed to evaluate code. Please try again.');
   }
-
-  throw new Error('Failed to evaluate code');
 }
 
 export async function generateDebugProblem(topic: string, difficulty: string) {
@@ -309,26 +362,36 @@ export async function generateDebugProblem(topic: string, difficulty: string) {
 }
 
 export async function evaluateDebugCode(originalBuggyCode: string, fixedCode: string, description: string, testCases: any[]) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.0-flash',
+    generationConfig: {
+      responseMimeType: "application/json",
+      temperature: 0.7
+    }
+  });
 
   const prompt = `Evaluate the debugging solution:
 
-  Original Buggy Code:
+  Original Buggy Code (DO NOT include in response):
   ${originalBuggyCode}
 
-  Fixed Code:
+  Fixed Code (DO NOT include in response):
   ${fixedCode}
 
   Problem Description: ${description}
   Test Cases: ${JSON.stringify(testCases)}
 
-  IMPORTANT: Do NOT use asterisks or markdown formatting in your feedback. Use plain text only.
+  IMPORTANT:
+  - Return ONLY valid JSON
+  - Do NOT use asterisks or markdown formatting in your feedback
+  - Use plain text only in all string values
+  - Keep feedback concise (max 200 words)
 
-  Return a JSON object with:
+  Return exactly this JSON structure:
   {
     "passed": true/false,
     "score": number (0-100),
-    "feedback": "Detailed feedback on whether bugs were fixed correctly (plain text, no asterisks)",
+    "feedback": "Detailed feedback on whether bugs were fixed correctly",
     "bugsFound": number,
     "testResults": [
       {
@@ -339,22 +402,38 @@ export async function evaluateDebugCode(originalBuggyCode: string, fixedCode: st
     ]
   }`;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    let text = response.text().trim();
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    const parsed = JSON.parse(jsonMatch[0]);
-    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+    text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    }
+
+    const parsed = JSON.parse(text);
+    const cleanText = (str: string) => {
+      if (!str) return '';
+      return str
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+        .trim();
+    };
 
     return {
-      ...parsed,
-      feedback: cleanText(parsed.feedback)
+      passed: parsed.passed === true,
+      score: typeof parsed.score === 'number' ? parsed.score : 0,
+      feedback: cleanText(parsed.feedback || parsed.Feedback || ''),
+      bugsFound: typeof parsed.bugsFound === 'number' ? parsed.bugsFound : 0,
+      testResults: Array.isArray(parsed.testResults) ? parsed.testResults : []
     };
+  } catch (error) {
+    console.error('Error parsing evaluation response:', error, error instanceof Error ? error.message : '');
+    throw new Error('Failed to evaluate debug code. Please try again.');
   }
-
-  throw new Error('Failed to evaluate debug code');
 }
 
 export async function generatePseudocodeProblem(topic: string, difficulty: string) {
@@ -410,22 +489,32 @@ export async function generatePseudocodeProblem(topic: string, difficulty: strin
 }
 
 export async function evaluatePseudocode(problem: string, requirements: string[], pseudocode: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.0-flash',
+    generationConfig: {
+      responseMimeType: "application/json",
+      temperature: 0.7
+    }
+  });
 
   const prompt = `Evaluate the following pseudocode solution:
 
   Problem: ${problem}
   Requirements: ${JSON.stringify(requirements)}
 
-  User's Pseudocode:
+  User's Pseudocode (DO NOT include in response):
   ${pseudocode}
 
-  IMPORTANT: Do NOT use asterisks or markdown formatting in your feedback. Use plain text only.
+  IMPORTANT:
+  - Return ONLY valid JSON
+  - Do NOT use asterisks or markdown formatting in your feedback
+  - Use plain text only in all string values
+  - Keep feedback concise (max 200 words)
 
-  Return a JSON object with:
+  Return exactly this JSON structure:
   {
     "score": number (0-100),
-    "feedback": "Detailed feedback on logic, clarity, completeness, and edge case handling (plain text, no asterisks)",
+    "feedback": "Detailed feedback on logic, clarity, completeness, and edge case handling",
     "strengths": ["Strength 1", "Strength 2"],
     "improvements": ["Area for improvement 1", "Area for improvement 2"],
     "logicCorrect": true/false,
@@ -437,26 +526,40 @@ export async function evaluatePseudocode(problem: string, requirements: string[]
   1. Logical correctness of the algorithm
   2. Handling of edge cases
   3. Clarity and readability of the pseudocode
-  4. Completeness in addressing all requirements
+  4. Completeness in addressing all requirements`;
 
-  Remember: Use only plain text without asterisks or markdown formatting.`;
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    let text = response.text().trim();
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
+    text = text.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    }
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    const parsed = JSON.parse(jsonMatch[0]);
-    const cleanText = (str: string) => str.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+    const parsed = JSON.parse(text);
+    const cleanText = (str: string) => {
+      if (!str) return '';
+      return str
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+        .trim();
+    };
 
     return {
-      ...parsed,
-      feedback: cleanText(parsed.feedback),
-      strengths: parsed.strengths.map((s: string) => cleanText(s)),
-      improvements: parsed.improvements.map((i: string) => cleanText(i))
+      score: typeof parsed.score === 'number' ? parsed.score : 50,
+      feedback: cleanText(parsed.feedback || parsed.Feedback || ''),
+      strengths: (parsed.strengths || []).map((s: string) => cleanText(s)),
+      improvements: (parsed.improvements || []).map((i: string) => cleanText(i)),
+      logicCorrect: parsed.logicCorrect === true,
+      edgeCasesHandled: parsed.edgeCasesHandled === true,
+      clarityScore: typeof parsed.clarityScore === 'number' ? parsed.clarityScore : 5
     };
+  } catch (error) {
+    console.error('Error parsing evaluation response:', error, error instanceof Error ? error.message : '');
+    throw new Error('Failed to evaluate pseudocode. Please try again.');
   }
-
-  throw new Error('Failed to evaluate pseudocode');
 }
