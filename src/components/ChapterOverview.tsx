@@ -16,7 +16,7 @@ interface OverviewContent {
 async function generateChapterOverview(title: string, description: string, difficulty: string): Promise<OverviewContent> {
   const { GoogleGenerativeAI } = await import('@google/generative-ai');
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const prompt = `Generate a brief overview for a programming chapter.
 

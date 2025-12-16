@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
 export async function generateTestQuestions(topic: string, difficulty: string, count: number = 10) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const prompt = `Generate ${count} multiple-choice questions about ${topic} at ${difficulty} difficulty level.
 
@@ -37,7 +37,7 @@ export async function generateTestQuestions(topic: string, difficulty: string, c
 }
 
 export async function generateCodingProblem(topic: string, difficulty: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const prompt = `Generate a coding problem about ${topic} at ${difficulty} difficulty level.
 
@@ -104,7 +104,7 @@ export async function generateCodingProblem(topic: string, difficulty: string) {
 
 export async function evaluateCode(code: string, problem: string, testCases: any[]) {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.5-flash',
     generationConfig: {
       responseMimeType: "application/json",
       temperature: 0.7
@@ -177,7 +177,7 @@ export async function evaluateCode(code: string, problem: string, testCases: any
 }
 
 export async function generateMCQQuestions(courseTopic: string, chapterTitle: string, chapterDescription: string, count: number = 5) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const prompt = `Generate ${count} multiple-choice questions for a ${courseTopic} course, specifically for the chapter titled "${chapterTitle}".
 
@@ -207,7 +207,7 @@ export async function generateMCQQuestions(courseTopic: string, chapterTitle: st
 }
 
 export async function generateCodingChallenge(courseTopic: string, chapterTitle: string, chapterDescription: string, difficulty: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const prompt = `Generate a coding challenge for a ${courseTopic} course, specifically for the chapter titled "${chapterTitle}".
 
@@ -251,7 +251,7 @@ export async function generateCodingChallenge(courseTopic: string, chapterTitle:
 
 export async function evaluateCodingChallenge(challengeTitle: string, challengeDescription: string, code: string) {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.5-flash',
     generationConfig: {
       responseMimeType: "application/json",
       temperature: 0.7
@@ -315,7 +315,7 @@ export async function evaluateCodingChallenge(challengeTitle: string, challengeD
 }
 
 export async function generateDebugProblem(topic: string, difficulty: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const prompt = `Generate a debug challenge about ${topic} at ${difficulty} difficulty level.
 
@@ -363,7 +363,7 @@ export async function generateDebugProblem(topic: string, difficulty: string) {
 
 export async function evaluateDebugCode(originalBuggyCode: string, fixedCode: string, description: string, testCases: any[]) {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.5-flash',
     generationConfig: {
       responseMimeType: "application/json",
       temperature: 0.7
@@ -437,7 +437,7 @@ export async function evaluateDebugCode(originalBuggyCode: string, fixedCode: st
 }
 
 export async function generatePseudocodeProblem(topic: string, difficulty: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const prompt = `Generate a pseudocode problem about ${topic} at ${difficulty} difficulty level.
 
@@ -490,7 +490,7 @@ export async function generatePseudocodeProblem(topic: string, difficulty: strin
 
 export async function evaluatePseudocode(problem: string, requirements: string[], pseudocode: string) {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.5-flash',
     generationConfig: {
       responseMimeType: "application/json",
       temperature: 0.7
